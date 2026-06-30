@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="header(titulo)" class="top-header">
+    <h2 th:text="${titulo}">Panel Principal</h2>
+    <div class="header-info">
+        <span th:text="${#calendars.format(#calendars.createNow(), 'dd MMM, yyyy')}">Hoy</span>
+        <div class="user-avatar">
+            <i class="fa-regular fa-user"></i>
+        </div>
+    </div>
+</div>
+</body>
+</html>

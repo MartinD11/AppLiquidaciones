@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Cliente</title>
+</head>
+<body>
+
+<h1>Editar Cliente</h1>
+
+<form th:action="@{/clients/update/{id}(id=${client.id})}" th:object="${client}" method="post">
+
+    <div>
+        <label>Nombre:</label>
+        <input type="text" th:field="*{name}" required>
+    </div>
+
+    <div>
+        <label>Apellido:</label>
+        <input type="text" th:field="*{lastName}" required>
+    </div>
+
+    <button type="submit">Actualizar Cliente</button>
+</form>
+
+<br>
+<a href="/clients">Cancelar y volver a la lista</a>
+
+</body>
+</html>
