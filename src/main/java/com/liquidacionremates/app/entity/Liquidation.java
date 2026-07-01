@@ -44,7 +44,6 @@ public class Liquidation {
     @JoinColumn(name = "auction_id", nullable = false)
     private Auction auction;
 
-    // mappedBy = "liquidation" porque así se llama la variable en Product
     @OneToMany(mappedBy = "liquidation")
     private List<Product> liquidatedProducts = new ArrayList<>();
 

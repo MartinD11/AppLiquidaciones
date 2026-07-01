@@ -1,0 +1,20 @@
+2026-06-30 16:09:36.877333-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "BASE_PRICE NUMERIC(10, 2)": "345342523455.00 (14)"
+Value too long for column "BASE_PRICE NUMERIC(10, 2)": "345342523455.00 (14)"; SQL statement:
+insert into products (auction_id,base_price,liquidation_id,lot_number,name,sale_price,client_id,status,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
+2026-06-30 16:09:46.052044-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "BASE_PRICE NUMERIC(10, 2)": "345342523455.00 (14)"
+Value too long for column "BASE_PRICE NUMERIC(10, 2)": "345342523455.00 (14)"; SQL statement:
+insert into products (auction_id,base_price,liquidation_id,lot_number,name,sale_price,client_id,status,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
+2026-06-30 16:16:56.070268-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "BASE_PRICE NUMERIC(10, 2)": "324543534.00 (11)"
+Value too long for column "BASE_PRICE NUMERIC(10, 2)": "324543534.00 (11)"; SQL statement:
+insert into products (auction_id,base_price,liquidation_id,lot_number,name,sale_price,client_id,status,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
+2026-06-30 16:17:45.587715-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "BASE_PRICE NUMERIC(10, 2)": "324543534.00 (11)"
+Value too long for column "BASE_PRICE NUMERIC(10, 2)": "324543534.00 (11)"; SQL statement:
+insert into products (auction_id,base_price,liquidation_id,lot_number,name,sale_price,client_id,status,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
+2026-06-30 16:51:25.307638-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "SALE_PRICE NUMERIC(10, 2)": "56456456456.00 (13)"
+Value too long for column "SALE_PRICE NUMERIC(10, 2)": "56456456456.00 (13)"; SQL statement:
+update products set auction_id=?,base_price=?,liquidation_id=?,lot_number=?,name=?,sale_price=?,client_id=?,status=? where id=? [22001-240]

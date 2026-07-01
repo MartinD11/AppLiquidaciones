@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="sidebar" class="sidebar">
+<div th:fragment="sidebar(activePage)" class="sidebar">
     <div class="sidebar-logo">
         <i class="fa-solid fa-gavel" style="color: #f59e0b;"></i> RematePro
     </div>
     <ul class="nav-menu">
-        <li>
+        <li th:classappend="${activePage == 'clients'} ? 'active' : ''">
             <a th:href="@{/clients}" class="nav-link"><i class="fa-solid fa-users"></i> Clientes</a>
         </li>
-        <li>
+        <li th:classappend="${activePage == 'products'} ? 'active' : ''">
             <a th:href="@{/products}" class="nav-link"><i class="fa-solid fa-box-open"></i> Inventario</a>
         </li>
-        <li>
-            <a href="#" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Remates</a>
+        <li th:classappend="${activePage == 'auctions'} ? 'active' : ''">
+            <a th:href="@{/auctions}" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Remates</a>
         </li>
-        <li>
-            <a href="#" class="nav-link active"><i class="fa-solid fa-file-invoice-dollar"></i> Liquidaciones</a>
+        <li th:classappend="${activePage == 'liquidations'} ? 'active' : ''">
+            <a th:href="@{/liquidations}" class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i> Liquidaciones</a>
         </li>
     </ul>
 </div>

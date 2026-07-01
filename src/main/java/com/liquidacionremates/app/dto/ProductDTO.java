@@ -24,5 +24,6 @@ public class ProductDTO {
     private Client seller = new Client();
     private Auction auction;
     private Liquidation liquidation;
+    private Client buyer;
 
 }

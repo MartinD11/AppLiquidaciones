@@ -22,7 +22,7 @@ public class Product {
     @Column(nullable = false)
     private Integer lotNumber;
 
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 19, scale = 2)
     private BigDecimal basePrice;
 
     @Column(precision = 10, scale = 2)
@@ -43,4 +43,8 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "liquidation_id")
     private Liquidation liquidation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer_id") // ID del cliente que compró
+    private Client buyer;
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,5 +106,14 @@ public class ProductController {
             return "redirect:/products";
     }
 
+    @PostMapping("/update-sale/{id}")
+    public String updateSale(@PathVariable Long id,
+                             @RequestParam BigDecimal salePrice,
+                             @RequestParam String status,
+                             @RequestParam(required = false) Long buyerId,
+                             @RequestParam Long auctionId) {
+        productService.updateSaleData(id, salePrice, status, buyerId);
+        return "redirect:/auctions/" + auctionId + "/catalog";
+    }
 
 }

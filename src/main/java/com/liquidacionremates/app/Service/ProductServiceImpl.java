@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -120,5 +121,33 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void markAsUnsold(Long id) {
         productRepository.markAsUnsold(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ProductDTO> findAvailableProducts() {
+        return productRepository.findByStatusAndAuctionIsNull(ProductStatus.NOT_SOLD)
+                .stream()
+                .map(productMapper::toProductDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public void updateSaleData(Long productId, BigDecimal salePrice, String status, Long buyerId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
+
+        product.setSalePrice(salePrice);
+        product.setStatus(ProductStatus.valueOf(status));
+
+        // Asignar comprador si se envió uno
+        if (buyerId != null) {
+            Client buyer = clientRepository.findById(buyerId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"));
+            product.setBuyer(buyer);
+        } else {
+            product.setBuyer(null);
+        }
     }
 }

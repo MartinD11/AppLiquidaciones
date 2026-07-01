@@ -225,3 +225,20 @@ body { background-color: #f4f7fe; color: #333; display: flex; height: 100vh; ove
 .btn-eliminar:hover {
     color: #dc2626;
 }
+
+/* Esto hace que si el LI tiene la clase active, cambie el fondo del ENLACE que está adentro */
+.nav-menu li.active a {
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* Opcional: si quieres que el icono también cambie a blanco */
+.nav-menu li.active a i {
+    color: white;
+}
+
+.sidebar-link.active {
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 8px;
+}

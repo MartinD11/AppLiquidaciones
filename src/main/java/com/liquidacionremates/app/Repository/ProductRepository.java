@@ -1,6 +1,7 @@
 package com.liquidacionremates.app.Repository;
 
 import com.liquidacionremates.app.entity.Product;
+import com.liquidacionremates.app.enums.ProductStatus;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -26,4 +27,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Transactional
     @Query("UPDATE Product p SET p.status = 'NO_VENDIDO' WHERE p.id = :id")
     void markAsUnsold(Long id);
+
+    List<Product> findByStatusAndAuctionIsNull(ProductStatus status);
 }
