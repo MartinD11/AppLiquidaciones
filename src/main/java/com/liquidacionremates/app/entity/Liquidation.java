@@ -47,6 +47,9 @@ public class Liquidation {
     @OneToMany(mappedBy = "liquidation")
     private List<Product> liquidatedProducts = new ArrayList<>();
 
+    @Column(precision = 5, scale = 2, nullable = false)
+    private BigDecimal commissionPercentage;
+
     public String getVisualIdentifier() {
         if (this.generationDate == null) return "Liquidation without date";
 

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Liquidación</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        @media print {
+            /* Ocultamos solo lo que realmente queremos que no salga */
+            .no-print, .sidebar, .main-header, nav {
+                display: none;
+            }
+
+            /* El contenedor del ticket se ajusta naturalmente */
+            .ticket-container {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                border: none;
+                box-shadow: none;
+            }
+
+            /* Aseguramos visibilidad básica sin forzar */
+            body {
+                background-color: white;
+            }
+        }
+        .print-btn {
+            padding: 12px 30px;
+            background-color: #3b82f6; /* Azul moderno */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+        }
+
+        .print-btn:hover {
+            background-color: #2563eb; /* Azul más oscuro al pasar el mouse */
+        }
+    </style>
+</head>
+<body style="background-color: #f1f5f9; padding: 40px;">
+
+<div class="tickect-container" style="max-width: 800px; margin: auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+    <header class="ticket-header" style="border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; padding-bottom: 10px;">
+        <h2 style="color: #1e293b;">Liquidación: <span th:text="${liq.client.name + ' ' + liq.client.lastName}">Nombre Cliente</span></h2>
+        <p style="color: #64748b;">Fecha del Remate: <span th:text="${liq.auction.date}">Fecha</span></p>
+    </header>
+
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+        <tr style="border-bottom: 1px solid #e2e8f0; color: #64748b;">
+            <th style="padding: 10px; text-align: left;">Producto/Lote</th>
+            <th style="padding: 10px; text-align: right;">Precio de Venta</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${liq.liquidatedProducts}" style="border-bottom: 1px solid #f8fafc;">
+            <td style="padding: 10px;" th:text="${product.name}">Producto X</td>
+            <td style="padding: 10px; text-align: right;" th:text="${'$' + product.getSalePrice()}">$0.00</td>
+        </tr>
+        </tbody>
+        <tfoot style="font-weight: bold; font-size: 1.1rem; color: #1e293b;">
+        <tr>
+            <td style="padding: 15px 10px;">Total Bruto</td>
+            <td style="padding: 15px 10px; text-align: right;" th:text="${'$' + liq.totalSold}">$0.00</td>
+        </tr>
+        <tr style="color: #ef4444;">
+            <td style="padding: 10px;">Comisión Casa (-10%)</td>
+            <td style="padding: 10px; text-align: right;" th:text="${'-$' + liq.retainedCommission}">-$0.00</td>
+        </tr>
+        <tr style="border-top: 2px solid #e2e8f0;">
+            <td style="padding: 15px 10px;">Neto a Pagar</td>
+            <td style="padding: 15px 10px; text-align: right;" th:text="${'$' + liq.netToPay}">$0.00</td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <div style="margin-top: 30px; text-align: center;">
+        <button class="no-print print-btn" onclick="window.print()" style="">
+            <i class="fa-solid fa-print"></i> Imprimir Liquidación
+        </button>
+    </div>
+</div>
+</body>
+</html>

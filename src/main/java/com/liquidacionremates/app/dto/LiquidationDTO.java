@@ -26,4 +26,5 @@ public class LiquidationDTO {
     private Client client;
     private Auction auction;
     private List<Product> liquidatedProducts;
+    private BigDecimal commissionPercentage;
 }

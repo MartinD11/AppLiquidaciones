@@ -25,7 +25,7 @@ public class Product {
     @Column(precision = 19, scale = 2)
     private BigDecimal basePrice;
 
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 19, scale = 2)
     private BigDecimal salePrice;
 
     @Enumerated(EnumType.STRING)

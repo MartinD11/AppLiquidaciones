@@ -78,23 +78,25 @@
                 <thead>
                 <tr>
                     <th>Lote</th>
-                    <th>Dueño</th>
-                    <th>Nombre</th>
-                    <th>Estado</th>
+                    <th>Producto</th>
+                    <th>Base</th>
+                    <th>Comprador</th>
                     <th>Precio Final</th>
-                    <th>Comprador</th> <th>Acciones</th>
+                    <th>Dueño</th>
+                    <th>Estado</th> <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="product : ${auction.soldProducts}">
                     <td th:text="${product.lotNumber}">1</td>
-                    <td th:text="${product.seller != null ? product.seller.name + ' ' + product.seller.lastName : '-'}">Dueño</td>
                     <td th:text="${product.name}">...</td>
-                    <td th:text="${product.status}">STATUS</td>
-                    <td th:text="${product.salePrice != null ? '$' + product.salePrice : '-'}">-</td>
-
+                    <td th:text="${product.basePrice}"></td>
                     <td th:text="${product.buyer != null ? product.buyer.name + ' ' + product.buyer.lastName : '-'}">-</td>
-
+                    <td th:text="${product.salePrice != null ? '$' + product.salePrice : '-'}">-</td>
+                    <td th:text="${product.seller != null ? product.seller.name + ' ' + product.seller.lastName : '-'}">Dueño</td>
+                    <td th:text="${product.status.name() == 'SOLD'} ? 'Vendido' : 'No vendido'">
+                        STATUS
+                    </td>
                     <td>
                         <button type="button" class="btn-accion btn-editar-lote"
                                 th:data-id="${product.id}"

@@ -29,4 +29,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     void markAsUnsold(Long id);
 
     List<Product> findByStatusAndAuctionIsNull(ProductStatus status);
+
+    List<Product> findByAuctionIdAndStatus(Long auctionId, ProductStatus productStatus);
 }
