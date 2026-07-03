@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // --- LÓGICA DEL MODAL DE EDITAR ---
     const editModal = document.getElementById("editModal");
     const closeEditModalBtn = document.getElementById("closeModalBtn");
     const editForm = document.getElementById("editForm");
@@ -31,8 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
         editModal.style.display = "none";
     });
 
-
-    // --- LÓGICA DEL MODAL DE ELIMINAR ---
     const deleteModal = document.getElementById("deleteModal");
     const closeDeleteModalBtn = document.getElementById("closeDeleteModalBtn");
     const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
@@ -42,18 +39,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     botonesEliminar.forEach(boton => {
         boton.addEventListener("click", function (event) {
-            event.preventDefault(); // Evitamos cualquier comportamiento por defecto
+            event.preventDefault();
 
             const id = this.getAttribute("data-id");
             const name = this.getAttribute("data-name");
 
-            // Insertamos el nombre del producto en el texto del modal
             deleteProductName.textContent = name;
 
-            // Le armamos la URL de eliminación al botón rojo
             confirmDeleteBtn.href = "/products/delete/" + id;
 
-            // Mostramos el modal
             deleteModal.style.display = "flex";
         });
     });
@@ -63,7 +57,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // --- LÓGICA GLOBAL PARA CERRAR HACIENDO CLIC AFUERA ---
     window.addEventListener("click", function (event) {
         if (event.target === editModal) {
             editModal.style.display = "none";

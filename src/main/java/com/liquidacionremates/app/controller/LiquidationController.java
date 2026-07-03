@@ -59,13 +59,11 @@ public class LiquidationController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
-        // Redirigimos de vuelta al mismo remate para que la pantalla no se recargue en blanco
         return "redirect:/liquidations?auctionId=" + auctionId;
     }
 
     @GetMapping("/view/{id}")
     public String viewLiquidationDetails(@PathVariable Long id, Model model) {
-        // Buscamos la liquidación por ID
         LiquidationDTO liquidation = liquidationService.findById(id);
         model.addAttribute("liq", liquidation);
         return "liquidations/detail";

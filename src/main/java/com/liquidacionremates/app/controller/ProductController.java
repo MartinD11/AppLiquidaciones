@@ -53,36 +53,21 @@ public class ProductController {
 
     @PostMapping("/update/{id}")
     public String updateProduct(@PathVariable Long id, @ModelAttribute ProductDTO productDTO) {
-        try {
-            // Intentamos actualizar el producto
             productService.update(id, productDTO);
             return "redirect:/products";
 
-        } catch (Exception e) {
-            // Si falla, imprimimos el cartel gigante en la consola del IDE
-            System.out.println("\n=======================================================");
-            System.out.println("💥 ERROR REAL AL ACTUALIZAR EL PRODUCTO 💥");
-            System.out.println("=======================================================");
-            e.printStackTrace();
-            System.out.println("=======================================================\n");
-
-            // Volvemos a lanzar la excepción para que Spring siga su curso
-            throw e;
-        }
     }
 
-    // --- 3. ELIMINAR ---
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.delete(id);
         return "redirect:/products";
     }
 
-    // --- 4. CAMBIAR ESTADOS ---
     @PostMapping("/mark-sold/{id}")
     public String markAsSold(@PathVariable Long id) {
         productService.markAsSold(id);
-        return "redirect:/products"; // O a la vista del remate, según necesites luego
+        return "redirect:/products";
     }
 
     @PostMapping("/mark-unsold/{id}")

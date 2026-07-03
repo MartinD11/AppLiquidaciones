@@ -54,7 +54,7 @@ public class Liquidation {
         if (this.generationDate == null) return "Liquidation without date";
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        // Corregí "Remate del" por "Liquidation of"
+
         return "Liquidation of " + this.generationDate.format(formatter);
     }
 }

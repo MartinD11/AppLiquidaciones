@@ -1,15 +1,19 @@
 package com.liquidacionremates.app.Service;
 
+import com.liquidacionremates.app.Repository.AuctionRepository;
 import com.liquidacionremates.app.Repository.ClientRepository;
 import com.liquidacionremates.app.Repository.ProductRepository;
 import com.liquidacionremates.app.dto.ClientDTO;
 import com.liquidacionremates.app.dto.ProductDTO;
+import com.liquidacionremates.app.entity.Auction;
 import com.liquidacionremates.app.entity.Client;
 import com.liquidacionremates.app.entity.Product;
 import com.liquidacionremates.app.enums.ProductStatus;
 import com.liquidacionremates.app.exception.ResourceNotFoundException;
 import com.liquidacionremates.app.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final ClientRepository clientRepository;
+    private final AuctionRepository auctionRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -74,7 +79,6 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Product not found with ID: " + id));
 
-        // Actualizamos los campos básicos
         if(productDTO.getName() != null) product.setName(productDTO.getName());
         if(productDTO.getLotNumber() != null) product.setLotNumber(productDTO.getLotNumber());
         if(productDTO.getBasePrice() != null) product.setBasePrice(productDTO.getBasePrice());
@@ -141,7 +145,6 @@ public class ProductServiceImpl implements ProductService {
         product.setSalePrice(salePrice);
         product.setStatus(ProductStatus.valueOf(status));
 
-        // Asignar comprador si se envió uno
         if (buyerId != null) {
             Client buyer = clientRepository.findById(buyerId)
                     .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"));
@@ -149,5 +152,15 @@ public class ProductServiceImpl implements ProductService {
         } else {
             product.setBuyer(null);
         }
+    }
+
+    @Override
+    public Page<ProductDTO> getProductsByAuctionPaged(Long auctionId, Pageable pageable) {
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(()->new ResourceNotFoundException("No se encontro el remate"));
+
+        return productRepository.findAllByAuction_Id(auctionId,pageable)
+                .map(productMapper::toProductDTO);
+
     }
 }

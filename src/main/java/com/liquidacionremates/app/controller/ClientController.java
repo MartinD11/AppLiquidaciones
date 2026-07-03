@@ -30,7 +30,7 @@ public class ClientController {
     @PostMapping("/save")
     public String saveClient(@ModelAttribute("client") ClientDTO clientDTO) {
         clientService.save(clientDTO);
-        return "redirect:/clients";
+        return "clients/form";
     }
 
     @GetMapping("/edit/{id}")

@@ -5,8 +5,12 @@ import com.liquidacionremates.app.Service.ClientService;
 import com.liquidacionremates.app.Service.ProductService;
 import com.liquidacionremates.app.dto.AuctionDTO;
 import com.liquidacionremates.app.dto.ProductDTO;
+import com.liquidacionremates.app.entity.Product;
 import com.liquidacionremates.app.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +27,6 @@ public class AuctionController {
     private final ProductService productService;
     private final ClientService clientService;
 
-    // =====================================================================================
-    // 1. DASHBOARD DE REMATES (Creación y Listado)
-    // =====================================================================================
 
     @GetMapping
     public String listAuctions(@RequestParam(required = false) LocalDate searchDate, Model model) {
@@ -33,14 +34,11 @@ public class AuctionController {
 
         try {
             if (searchDate != null) {
-                // Si buscó por fecha, traemos solo ese
                 auctions = List.of(auctionService.findByDate(searchDate));
             } else {
-                // Si no buscó nada, traemos todos
                 auctions = auctionService.findAll();
             }
         } catch (ResourceNotFoundException e) {
-            // Si la fecha no existe, mandamos lista vacía y un mensaje
             auctions = List.of();
             model.addAttribute("error", "No hay remates programados para esa fecha.");
         }
@@ -98,5 +96,19 @@ public class AuctionController {
     public String removeProduct(@PathVariable Long id, @PathVariable Long productId) {
             auctionService.removeProductFromAuction(productId);
             return "redirect:/auctions/" + id + "/catalog";
+    }
+
+    @GetMapping("/printCatalog/{auctionId}")
+    public String printCatalogo(
+            @PathVariable Long auctionId,
+            @PageableDefault(size = 30) Pageable pageable,
+            Model model) {
+
+        Page<ProductDTO> productPage = productService.getProductsByAuctionPaged(auctionId, pageable);
+
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("auction", auctionService.findById(auctionId));
+
+        return "auctions/printCatalog";
     }
 }

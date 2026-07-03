@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Remate</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .header-impresion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .contenedor-paginacion {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        @media print {
+            @page {
+                margin: 0;
+            }
+
+            .no-print {
+                display: none ;
+            }
+            body {
+                margin: 1.5cm
+            }
+        }
+
+        .btn-imprimir {
+            background-color: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn-imprimir:hover {
+            background-color: #059669;
+        }
+
+        .pagination-link {
+            padding: 8px 16px;
+            background-color: #e2e8f0;
+            color: #334155;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .pagination-link:hover {
+            background-color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header-impresion no-print">
+    <h1 style="margin: 0;" th:text="'Catálogo de Remate: ' + ${#temporals.format(auction.date, 'dd/MM/yyyy')}">Catálogo</h1>
+
+    <button onclick="window.print()" class="btn-imprimir no-print">
+        <i class="fa-solid fa-print"></i> Imprimir Página Actual
+    </button>
+</header>
+
+<table style="width: 100%; border-collapse: collapse; text-align: left;">
+    <thead>
+    <tr style="background-color: #f2f2f2; border-bottom: 2px solid #333;">
+        <th style="padding: 10px;">LOTE</th>
+        <th style="padding: 10px;">PRODUCTO</th>
+        <th style="padding: 10px;">BASE</th>
+        <th style="padding: 10px;">COMPRADOR</th>
+        <th style="padding: 10px;">PRECIO</th>
+        <th style="padding: 10px;">DUEÑO</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${productPage.content}" style="border-bottom: 1px solid #ddd;">
+        <td style="padding: 10px;" th:text="${p.lotNumber}"></td>
+        <td style="padding: 10px;" th:text="${p.name}"></td>
+        <td style="padding: 10px;" th:text="${'$' + #numbers.formatDecimal(p.basePrice, 1, 2)}"></td>
+        <td style="padding: 10px;" th:text="${p.buyer != null ? p.buyer.name : '-'}"></td>
+        <td style="padding: 10px;" th:text="${p.salePrice != null ? '$' + #numbers.formatDecimal(p.salePrice, 1, 2) : '-'}"></td>
+        <td style="padding: 10px;" th:text="${p.seller != null ? p.seller.name + ' ' + p.seller.lastName : '-'}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="contenedor-paginacion no-print">
+
+    <a th:if="${productPage.hasPrevious()}"
+       th:href="@{/auctions/printCatalog/{id}(id=${auction.id}, page=${productPage.number - 1})}"
+       class="pagination-link">
+        <i class="fa-solid fa-chevron-left"></i> Anterior
+    </a>
+
+    <span style="font-weight: bold; color: #475569;">
+        Página <span th:text="${productPage.number + 1}"></span> de <span th:text="${productPage.totalPages}"></span>
+    </span>
+
+    <a th:if="${productPage.hasNext()}"
+       th:href="@{/auctions/printCatalog/{id}(id=${auction.id}, page=${productPage.number + 1})}"
+       class="pagination-link">
+        Siguiente <i class="fa-solid fa-chevron-right"></i>
+    </a>
+
+</div>
+
+</body>
+</html>

@@ -47,9 +47,22 @@
             box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
         }
 
-        /* Para darle un toque extra al hover */
         select:hover {
             border-color: #94a3b8;
+        }
+
+        .col-producto {
+            max-width: 280px;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        .col-acciones {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -67,7 +80,19 @@
                 <i class="fa-solid fa-gavel" style="color: #8b5cf6;"></i>
                 Catálogo: <span th:text="${#temporals.format(auction.date, 'dd/MM/yyyy')}"></span>
             </h2>
-            <a th:href="@{/auctions}" class="btn-volver"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+
+            <div style="display: flex; gap: 10px;">
+                <a th:href="@{/auctions/printCatalog/{id}(id=${auction.id})}"
+                   target="_blank"
+                   class="btn-volver"
+                   style="background: #3b82f6; color: white;">
+                    <i class="fa-solid fa-print"></i> Imprimir Lotes
+                </a>
+
+                <a th:href="@{/auctions}" class="btn-volver">
+                    <i class="fa-solid fa-arrow-left"></i> Volver
+                </a>
+            </div>
         </div>
 
         <div class="tabla-card card-asignados">
@@ -89,7 +114,7 @@
                 <tbody>
                 <tr th:each="product : ${auction.soldProducts}">
                     <td th:text="${product.lotNumber}">1</td>
-                    <td th:text="${product.name}">...</td>
+                    <td class="col-producto" th:text="${product.name}">...</td>
                     <td th:text="${product.basePrice}"></td>
                     <td th:text="${product.buyer != null ? product.buyer.name + ' ' + product.buyer.lastName : '-'}">-</td>
                     <td th:text="${product.salePrice != null ? '$' + product.salePrice : '-'}">-</td>
@@ -97,7 +122,7 @@
                     <td th:text="${product.status.name() == 'SOLD'} ? 'Vendido' : 'No vendido'">
                         STATUS
                     </td>
-                    <td>
+                    <td class="col-acciones">
                         <button type="button" class="btn-accion btn-editar-lote"
                                 th:data-id="${product.id}"
                                 th:data-price="${product.salePrice}"

@@ -47,7 +47,6 @@ public class LiquidationServiceImpl implements LiquidationService {
             throw new RuntimeException("No hay productos vendidos en este remate para liquidar.");
         }
 
-        //  Agrupar productos por Dueño (Vendedor) usando Java Streams
         Map<Client,List<Product>> productsBySeller = soldProducts.stream()
                 .collect(Collectors.groupingBy(Product::getSeller));
 
@@ -58,12 +57,10 @@ public class LiquidationServiceImpl implements LiquidationService {
             Client seller = entry.getKey();
             List<Product> clientsProducts = entry.getValue();
 
-            //sumo los precios de venta de todos los productos de determinado cliente
             BigDecimal totalSold = clientsProducts.stream()
                     .map(Product::getSalePrice)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            // calcular comisiones y neto
             BigDecimal retainedCommission = totalSold.multiply(commissionMultiplier);
             BigDecimal netToPay = totalSold.subtract(retainedCommission);
 
@@ -79,7 +76,6 @@ public class LiquidationServiceImpl implements LiquidationService {
 
             Liquidation savedLiquidation = liquidationRepository.save(liquidation);
 
-            //vinculo los pructos a cada liquidacion
             for(Product product : clientsProducts) {
                 product.setLiquidation(savedLiquidation);
             }
@@ -150,12 +146,10 @@ public class LiquidationServiceImpl implements LiquidationService {
 
     @Override
     public LiquidationSummaryDTO getSummaryByAuctionAndClient(Long auctionId, Long clientId) {
-        // 1. Aplicamos la misma lógica de limpieza de ID que en getFilteredLiquidations
         Long idToSearch = (clientId != null && clientId <= 0) ? null : clientId;
 
         List<Liquidation> list = liquidationRepository.findByAuctionIdAndOptionalClient(auctionId, idToSearch);
 
-        // 3. Calculamos totales (esto no cambia, está perfecto así)
         BigDecimal totalSold = list.stream().map(Liquidation::getTotalSold).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal totalCommission = list.stream().map(Liquidation::getRetainedCommission).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal totalNet = list.stream().map(Liquidation::getNetToPay).reduce(BigDecimal.ZERO, BigDecimal::add);

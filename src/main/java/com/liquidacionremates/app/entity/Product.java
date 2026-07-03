@@ -45,6 +45,6 @@ public class Product {
     private Liquidation liquidation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id") // ID del cliente que compró
+    @JoinColumn(name = "buyer_id")
     private Client buyer;
 }

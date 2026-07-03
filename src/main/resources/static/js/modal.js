@@ -32,12 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
     document.querySelector('table').addEventListener('click', (event) => {
-        // Si hicieron clic en el botón de eliminar (o en el icono dentro del botón)
         const deleteBtn = event.target.closest('.btn-eliminar');
         if (deleteBtn) {
-            event.preventDefault(); // Evitamos que navegue directo
-            confirmDeleteBtn.href = deleteBtn.getAttribute('href'); // Pasamos el link
-            deleteModal.style.display = 'flex'; // Abrimos el modal
+            event.preventDefault();
+            confirmDeleteBtn.href = deleteBtn.getAttribute('href');
+            deleteModal.style.display = 'flex';
         }
     });
 
