@@ -64,6 +64,45 @@
             align-items: center;
             white-space: nowrap;
         }
+
+        /* Estilos para la lista flotante del buscador */
+        .autocomplete-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .autocomplete-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .autocomplete-results li {
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .autocomplete-results li:hover {
+            background-color: #f8fafc;
+            color: #3b82f6;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -127,7 +166,9 @@
                                 th:data-id="${product.id}"
                                 th:data-price="${product.salePrice}"
                                 th:data-status="${product.status}"
-                                th:data-buyer="${product.buyer != null ? product.buyer.id : ''}"> <i class="fa-solid fa-pen-to-square"></i>
+                                th:data-buyer="${product.buyer != null ? product.buyer.id : ''}"
+                                th:data-buyer-name="${product.buyer != null ? product.buyer.name + ' ' + product.buyer.lastName : ''}">
+                            <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                         <a th:href="@{/auctions/{id}/remove-product/{productId}(id=${auction.id}, productId=${product.id})}" class="btn-quitar"><i class="fa-solid fa-trash"></i></a>
                     </td>
@@ -177,13 +218,16 @@
             <div class="form-group">
                 <label>Comprador:</label>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <select name="buyerId" id="editBuyer" style="flex: 1; margin: 0; height: 42px;">
-                        <option value="">Seleccione un comprador...</option>
-                        <option th:each="client : ${clients}"
-                                th:value="${client.id}"
-                                th:text="${client.name + ' ' + client.lastName}">
-                        </option>
-                    </select>
+
+                    <div class="autocomplete-container">
+                        <!-- Este guarda el ID para mandar al backend -->
+                        <input type="hidden" name="buyerId" id="editBuyerId">
+                        <!-- Este es el que ve el usuario -->
+                        <input type="text" id="clientSearch" style="width: 100%; margin: 0; height: 42px;" placeholder="Escriba para buscar..." autocomplete="off">
+                        <!-- La lista flotante -->
+                        <ul id="clientSearchResults" class="autocomplete-results"></ul>
+                    </div>
+
                     <button type="button" id="openClientModalBtn" class="btn-guardar"
                             style="width: 42px; height: 42px; margin: 0; display: flex; align-items: center; justify-content: center; padding: 0; font-size: 20px;">
                         +
@@ -219,6 +263,6 @@
     </div>
 </div>
 
-<script th:src="@{/js/catalog-auctions.js}"></script>
+<script th:src="@{/js/catalog-auctions.js(v=2)}"></script>
 </body>
 </html>

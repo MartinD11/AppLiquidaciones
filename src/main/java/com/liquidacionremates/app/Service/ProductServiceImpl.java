@@ -163,4 +163,26 @@ public class ProductServiceImpl implements ProductService {
                 .map(productMapper::toProductDTO);
 
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ProductDTO> searchByNameList(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return List.of();
+        }
+        return productRepository.findByNameContainingIgnoreCase(query).stream()
+                .map(productMapper::toProductDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ProductDTO> findByLotNumber(Integer lotNumber) {
+        if (lotNumber == null) {
+            return List.of();
+        }
+        return productRepository.findAllByLotNumber(lotNumber).stream()
+                .map(productMapper::toProductDTO)
+                .collect(Collectors.toList());
+    }
 }

@@ -3,28 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>RematePro - Productos</title>
-    <link rel="stylesheet" th:href="@{/css/style.css?v=3}">
+    <link rel="stylesheet" th:href="@{/css/style.css(v=4)}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         .search-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-top: 20px; margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .search-card input { padding: 10px; border: 1px solid #e2e8f0; border-radius: 5px; outline: none; flex: 1; min-width: 150px; }
+        .search-card input { padding: 10px; border: 1px solid #e2e8f0; border-radius: 5px; outline: none; width: 100%; }
         .search-card input:focus { border-color: #3b82f6; }
-        .btn-buscar { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+        .btn-buscar { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; height: 40px; }
         .btn-buscar:hover { background: #2563eb; }
-        .btn-limpiar { background: #e2e8f0; color: #4a5568; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+
+        .btn-limpiar { background: #e2e8f0; color: #4a5568; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; height: 40px; display: flex; align-items: center; box-sizing: border-box; }
         .btn-limpiar:hover { background: #cbd5e1; }
 
         .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
         .badge-vendido { background: #d1fae5; color: #065f46; }
         .badge-novendido { background: #f1f5f9; color: #475569; }
 
-        .inline-form { display: inline-block; margin: 0; }
-        .btn-estado { cursor: pointer; background: none; border: none; font-size: 16px; margin-right: 10px; }
-        .btn-vender { color: #10b981; }
-        .btn-vender:hover { color: #059669; }
-        .btn-novender { color: #64748b; }
-        .btn-novender:hover { color: #475569; }
+        /* Contenedores para que la búsqueda se vea ordenada */
+        .search-item { flex: 0.5; min-width: 120px; }
+
+        /* Estilos del autocompletado */
+        .autocomplete-container { position: relative; flex: 1; min-width: 220px; }
+        .autocomplete-results { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #cbd5e1; border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; z-index: 1000; list-style: none; padding: 0; margin: 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); display: none; }
+        .autocomplete-results li { padding: 10px 12px; cursor: pointer; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9; }
+        .autocomplete-results li:hover { background-color: #f8fafc; color: #3b82f6; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -43,17 +47,21 @@
         <a th:href="@{/products/new}" class="btn-nuevo"><i class="fa-solid fa-plus"></i> Nuevo Producto</a>
 
         <form th:action="@{/products}" method="get" class="search-card">
-            <input type="number" name="searchId" placeholder="Buscar por ID..." th:value="${param.searchId}">
-            <input type="text" name="searchName" placeholder="Buscar por Nombre..." th:value="${param.searchName}">
 
-            <select name="searchClientId" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 5px; outline: none; flex: 1; min-width: 200px;">
-                <option value="">-- Todos los Clientes --</option>
-                <option th:each="client : ${clients}"
-                        th:value="${client.id}"
-                        th:text="${client.name + ' ' + client.lastName}"
-                        th:selected="${param.searchClientId != null and param.searchClientId[0] == client.id.toString()}">
-                </option>
-            </select>
+            <div class="search-item">
+                <input type="number" name="searchLotNumber" placeholder="Lote N°..." th:value="${param.searchLotNumber}">
+            </div>
+
+            <div class="autocomplete-container">
+                <input type="text" name="searchName" id="productSearch" placeholder="Buscar por Nombre del producto..." th:value="${param.searchName}" autocomplete="off">
+                <ul id="productSearchResults" class="autocomplete-results"></ul>
+            </div>
+
+            <div class="autocomplete-container">
+                <input type="hidden" name="searchClientId" id="searchClientId" th:value="${param.searchClientId}">
+                <input type="text" id="clientSearch" placeholder="Buscar por Cliente..." autocomplete="off">
+                <ul id="clientSearchResults" class="autocomplete-results"></ul>
+            </div>
 
             <button type="submit" class="btn-buscar"><i class="fa-solid fa-search"></i> Buscar</button>
             <a th:href="@{/products}" class="btn-limpiar">Limpiar</a>
@@ -78,8 +86,8 @@
                     <td th:text="${product.name}">TV LG</td>
                     <td th:text="${product.basePrice != null ? '$' + product.basePrice : '-'}">$50000</td>
                     <td>
-                        <span th:classappend="${product.status != null && product.status.name() == 'VENDIDO'} ? 'badge badge-vendido' : 'badge badge-novendido'"
-                              th:text="${product.status != null ? product.status : 'NO_VENDIDO'}">
+                        <span th:classappend="${product.status != null && product.status.name() == 'SOLD'} ? 'badge badge-vendido' : 'badge badge-novendido'"
+                              th:text="${product.status != null && product.status.name() == 'SOLD' ? 'VENDIDO' : 'NO VENDIDO'}">
                         </span>
                     </td>
                     <td>
@@ -139,7 +147,7 @@
             ¿Estás seguro de que deseas eliminar el producto <strong id="deleteProductName"></strong>? Esta acción no se puede deshacer.
         </p>
         <div style="display: flex; justify-content: space-between; gap: 10px;">
-            <button type="button" id="closeDeleteModalBtn" class="btn-limpiar" style="flex: 1; border: none; cursor: pointer;">Cancelar</button>
+            <button type="button" id="closeDeleteModalBtn" class="btn-limpiar" style="flex: 1; border: none; cursor: pointer; justify-content: center;">Cancelar</button>
             <a id="confirmDeleteBtn" href="#" class="btn-guardar" style="background: #ef4444; flex: 1; text-align: center; text-decoration: none;">
                 Sí, Eliminar
             </a>
@@ -148,6 +156,7 @@
 </div>
 
 <script th:src="@{/js/modal-products.js}"></script>
+<script th:src="@{/js/product-list-search.js}"></script>
 
 </body>
 </html>

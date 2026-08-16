@@ -23,7 +23,7 @@ public class ProductController {
 
     @GetMapping
     public String listProducts(
-            @RequestParam(required = false) Long searchId,
+            @RequestParam(required = false) Integer searchLotNumber,
             @RequestParam(required = false) String searchName,
             @RequestParam(required = false) Long searchClientId,
             Model model) {
@@ -31,8 +31,8 @@ public class ProductController {
         List<ProductDTO> products = new ArrayList<>();
 
         try {
-            if (searchId != null) {
-                products.add(productService.findById(searchId));
+            if (searchLotNumber != null) {
+                products = productService.findByLotNumber(searchLotNumber);
             } else if (searchName != null && !searchName.isBlank()) {
                 productService.findByName(searchName).ifPresent(products::add);
             } else if (searchClientId != null) {
@@ -45,7 +45,6 @@ public class ProductController {
         }
 
         model.addAttribute("products", products);
-
         model.addAttribute("clients", clientService.findAll());
 
         return "products/list";
@@ -99,6 +98,12 @@ public class ProductController {
                              @RequestParam Long auctionId) {
         productService.updateSaleData(id, salePrice, status, buyerId);
         return "redirect:/auctions/" + auctionId + "/catalog";
+    }
+
+    @GetMapping("/search-ajax")
+    @ResponseBody
+    public List<ProductDTO> searchProductsAjax(@RequestParam("q") String query) {
+        return productService.searchByNameList(query);
     }
 
 }

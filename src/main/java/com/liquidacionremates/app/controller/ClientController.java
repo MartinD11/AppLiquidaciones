@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/clients")
 @RequiredArgsConstructor
@@ -17,27 +19,27 @@ public class ClientController {
     public String listClients(Model model) {
         var clients = clientService.findAll();
         model.addAttribute("clients", clients);
-        return "clients/list"; // <-- Bien, sin barra
+        return "clients/list";
     }
 
     @GetMapping("/new")
     public String showForm(Model model) {
         System.out.println("¡BINGO! El clic llegó al controlador Java.");
         model.addAttribute("client", new ClientDTO());
-        return "clients/form"; //
+        return "clients/form";
     }
 
     @PostMapping("/save")
     public String saveClient(@ModelAttribute("client") ClientDTO clientDTO) {
         clientService.save(clientDTO);
-        return "clients/form";
+        return "redirect:/clients/new";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         ClientDTO clientDTO = clientService.findById(id);
         model.addAttribute("client", clientDTO);
-        return "clients/edit"; // <-- CORREGIDO (sin barra inicial)
+        return "clients/edit";
     }
 
     @PostMapping("/update/{id}")
@@ -57,5 +59,11 @@ public class ClientController {
     public ClientDTO saveClientAjax(@RequestBody ClientDTO clientDTO) {
         // Usas tu servicio para guardar y devolver el objeto con el ID generado
         return clientService.save(clientDTO);
+    }
+
+    @GetMapping("/search")
+    @ResponseBody
+    public List<ClientDTO> searchClients(@RequestParam("q") String query) {
+        return clientService.searchByNameOrLastName(query);
     }
 }

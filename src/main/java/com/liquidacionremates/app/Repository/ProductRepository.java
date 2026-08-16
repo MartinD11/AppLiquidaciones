@@ -37,4 +37,8 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findByAuctionIdAndStatus(Long auctionId, ProductStatus productStatus);
 
     Page<Product> findAllByAuction_Id(Long auctionId, Pageable pageable);
+
+    List<Product> findByNameContainingIgnoreCase(String name);
+
+    List<Product> findAllByLotNumber(Integer lotNumber);
 }

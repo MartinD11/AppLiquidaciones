@@ -18,6 +18,12 @@
         .btn-guardar { background: #3b82f6; color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; }
         .btn-guardar:hover { background: #2563eb; }
         .full-width { grid-column: span 2; }
+
+        /* Estilos del autocompletado */
+        .autocomplete-container { position: relative; }
+        .autocomplete-results { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #cbd5e1; border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; z-index: 1000; list-style: none; padding: 0; margin: 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); display: none; }
+        .autocomplete-results li { padding: 10px 12px; cursor: pointer; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9; }
+        .autocomplete-results li:hover { background-color: #f8fafc; color: #3b82f6; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -33,7 +39,6 @@
             <hr style="border: 1px solid #f1f5f9; margin-bottom: 20px;">
 
             <form th:action="@{/products/save}" th:object="${product}" method="post">
-
                 <div class="form-grid">
                     <div class="form-group full-width">
                         <label>Nombre del Producto *</label>
@@ -42,13 +47,13 @@
 
                     <div class="form-group full-width">
                         <label>Cliente Vendedor (Propietario) *</label>
-                        <select th:field="*{seller.id}" required>
-                            <option value="" disabled selected>-- Seleccionar Cliente --</option>
-                            <option th:each="client : ${clients}"
-                                    th:value="${client.id}"
-                                    th:text="${client.name + ' ' + client.lastName}">
-                            </option>
-                        </select>
+                        <div class="autocomplete-container">
+                            <!-- ID oculto que se envía al servidor -->
+                            <input type="hidden" th:field="*{seller.id}" id="sellerId" required>
+                            <!-- Input visible de búsqueda -->
+                            <input type="text" id="clientSearch" required placeholder="Escriba para buscar un cliente..." autocomplete="off">
+                            <ul id="clientSearchResults" class="autocomplete-results"></ul>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -66,11 +71,12 @@
                     <a th:href="@{/products}" class="btn-cancelar">Volver a la lista</a>
                     <button type="submit" class="btn-guardar">Guardar en Inventario</button>
                 </div>
-
             </form>
         </div>
     </div>
 </div>
 
+<!-- Archivo JS externo referenciado desde tu carpeta js -->
+<script th:src="@{/js/product-form.js}"></script>
 </body>
 </html>

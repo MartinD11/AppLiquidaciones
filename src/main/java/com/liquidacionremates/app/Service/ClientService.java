@@ -12,4 +12,6 @@ public interface ClientService {
     ClientDTO update(Long id,ClientDTO clientDTO);
     void delete(Long id);
     ClientDTO findByNameAndLastName(String name,String lastName);
+
+    List<ClientDTO> searchByNameOrLastName(String query);
 }

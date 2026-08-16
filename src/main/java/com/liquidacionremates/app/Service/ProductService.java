@@ -25,4 +25,6 @@ public interface ProductService {
     void updateSaleData(Long productId, BigDecimal finalPrice, String status,Long buyerId);
 
     Page<ProductDTO> getProductsByAuctionPaged(Long auctionId, Pageable pageable);
+    List<ProductDTO> searchByNameList(String query);
+    List<ProductDTO> findByLotNumber(Integer lotNumber);
 }

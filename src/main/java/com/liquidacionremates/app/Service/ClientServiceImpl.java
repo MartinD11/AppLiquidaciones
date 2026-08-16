@@ -67,4 +67,19 @@ public class ClientServiceImpl implements ClientService {
 
         return clientMapper.toClientDTO(client);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ClientDTO> searchByNameOrLastName(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return List.of();
+        }
+
+        // Llamamos al nuevo método que busca por el nombre completo concatenado
+        List<Client> clients = clientRepository.searchByFullName(query);
+
+        return clients.stream()
+                .map(client -> clientMapper.toClientDTO(client))
+                .collect(Collectors.toList());
+    }
 }
