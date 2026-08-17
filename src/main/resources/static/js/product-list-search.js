@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ==========================================
-    // 1. AUTOCOMPLETADO CLIENTES
-    // ==========================================
+
+    // autocompletado de los clientes
+
     const clientSearch = document.getElementById("clientSearch");
     const searchClientId = document.getElementById("searchClientId");
     const clientSearchResults = document.getElementById("clientSearchResults");
@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ==========================================
-    // 2. AUTOCOMPLETADO PRODUCTOS
-    // ==========================================
+
+    // autocompletado de productos(lotes)
+
     const productSearch = document.getElementById("productSearch");
     const productSearchResults = document.getElementById("productSearchResults");
     let productTimeout;
@@ -74,7 +74,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                 li.textContent = producto.name + (producto.lotNumber ? ' (Lote: ' + producto.lotNumber + ')' : '');
 
                                 li.addEventListener('click', function() {
-                                    // Al seleccionar, guardamos solo el nombre exacto en el input
                                     productSearch.value = producto.name;
                                     productSearchResults.style.display = 'none';
                                 });
@@ -90,9 +89,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ==========================================
-    // 3. OCULTAR LISTAS AL HACER CLIC AFUERA
-    // ==========================================
+
+    // con esto oculto las listas al hacer clcik fuera del rango
     document.addEventListener("click", function(e) {
         if (clientSearch && clientSearchResults && e.target !== clientSearch && e.target !== clientSearchResults) {
             clientSearchResults.style.display = 'none';

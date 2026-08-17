@@ -136,7 +136,7 @@ public class LiquidationServiceImpl implements LiquidationService {
 
     @Override
     public List<LiquidationDTO> getFilteredLiquidations(Long auctionId, Long clientId) {
-        // Si clientId es 0, lo convertimos a null para que la query lo ignore
+        // si clientId es 0, lo convierto a null para que la query lo ignore
         Long idToSearch = (clientId != null && clientId <= 0) ? null : clientId;
 
         List<Liquidation> entities = liquidationRepository.findByAuctionIdAndOptionalClient(auctionId, idToSearch);

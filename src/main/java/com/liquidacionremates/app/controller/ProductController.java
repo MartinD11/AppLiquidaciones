@@ -22,38 +22,18 @@ public class ProductController {
     private final ClientService clientService;
 
     @GetMapping
-    public String listProducts(
-            @RequestParam(required = false) Integer searchLotNumber,
-            @RequestParam(required = false) String searchName,
-            @RequestParam(required = false) Long searchClientId,
-            Model model) {
-
-        List<ProductDTO> products = new ArrayList<>();
-
-        try {
-            if (searchLotNumber != null) {
-                products = productService.findByLotNumber(searchLotNumber);
-            } else if (searchName != null && !searchName.isBlank()) {
-                productService.findByName(searchName).ifPresent(products::add);
-            } else if (searchClientId != null) {
-                products = productService.findAllByClientId(searchClientId);
-            } else {
-                products = productService.findAll();
-            }
-        } catch (ResourceNotFoundException e) {
-            model.addAttribute("error", "No se encontraron productos con ese criterio.");
-        }
+    public String listProducts(Model model) {
+        List<ProductDTO> products = productService.findAll();
 
         model.addAttribute("products", products);
-        model.addAttribute("clients", clientService.findAll());
 
         return "products/list";
     }
 
     @PostMapping("/update/{id}")
     public String updateProduct(@PathVariable Long id, @ModelAttribute ProductDTO productDTO) {
-            productService.update(id, productDTO);
-            return "redirect:/products";
+        productService.update(id, productDTO);
+        return "redirect:/products";
 
     }
 
@@ -82,7 +62,6 @@ public class ProductController {
         model.addAttribute("clients", clientService.findAll());
         return "products/form";
     }
-
 
     @PostMapping("/save")
     public String saveProduct(@ModelAttribute("product") ProductDTO productDTO) {

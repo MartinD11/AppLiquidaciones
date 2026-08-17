@@ -75,7 +75,6 @@ public class ClientServiceImpl implements ClientService {
             return List.of();
         }
 
-        // Llamamos al nuevo método que busca por el nombre completo concatenado
         List<Client> clients = clientRepository.searchByFullName(query);
 
         return clients.stream()

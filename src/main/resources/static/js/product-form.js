@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Ocultar la lista de resultados si el usuario hace clic fuera de ella
     document.addEventListener("click", function(e) {
         if (clientSearch && searchResults && e.target !== clientSearch && e.target !== searchResults) {
             searchResults.style.display = 'none';

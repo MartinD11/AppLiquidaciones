@@ -57,7 +57,6 @@ public class ClientController {
     @PostMapping("/save-ajax")
     @ResponseBody
     public ClientDTO saveClientAjax(@RequestBody ClientDTO clientDTO) {
-        // Usas tu servicio para guardar y devolver el objeto con el ID generado
         return clientService.save(clientDTO);
     }
 

@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ==========================================
-    // 1. Lógica del Checkbox "Seleccionar Todo"
-    // ==========================================
+
+    //Lógica del Checkbox "Seleccionar Todo"
     const selectAllCheckbox = document.getElementById("selectAll");
     const productCheckboxes = document.querySelectorAll(".producto-checkbox");
 
@@ -14,9 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ==========================================
-    // 2. Elementos del Modal de Edición de Lote
-    // ==========================================
+
+    //Elementos del Modal de Edicion de Lote
     const editModal = document.getElementById("editLoteModal");
     const editForm = document.getElementById("editLoteForm");
     const editSalePrice = document.getElementById("editSalePrice");
@@ -27,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const clientSearch = document.getElementById("clientSearch");
     const searchResults = document.getElementById("clientSearchResults");
 
-    // Lógica para abrir el modal al tocar el lápiz
+    // Lógica para abrir el modal al tocar el edit
     document.querySelectorAll(".btn-editar-lote").forEach(btn => {
         btn.addEventListener("click", function () {
             const id = this.getAttribute("data-id");
@@ -45,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 clientSearch.value = (buyerName && buyerName !== 'null') ? buyerName : '';
             }
             if (searchResults) {
-                searchResults.style.display = 'none'; // Aseguramos que la lista esté oculta
+                searchResults.style.display = 'none';
             }
 
             editForm.action = "/products/update-sale/" + id;
@@ -65,9 +63,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // ==========================================
-    // 3. Lógica del Buscador (Autocompletado)
-    // ==========================================
+    //Lógica del Buscador (Autocompletado)
+
     let searchTimeout;
 
     if (clientSearch) {
@@ -119,9 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // ==========================================
-    // 4. Modal para Crear Nuevo Cliente (+ Ajax)
-    // ==========================================
+    //  Modal para Crear Nuevo Cliente (+ Ajax)
     const newClientModal = document.getElementById("newClientModal");
     const openClientModalBtn = document.getElementById("openClientModalBtn");
     const closeClientModalBtn = document.getElementById("closeClientModalBtn");
@@ -149,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
             })
                 .then(response => response.json())
                 .then(newClient => {
-                    // En lugar de agregar al <select>, actualizamos directamente el buscador
                     if (clientSearch && editBuyerId) {
                         clientSearch.value = newClient.name + " " + newClient.lastName;
                         editBuyerId.value = newClient.id;
@@ -157,7 +151,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     newClientModal.style.display = "none";
 
-                    // Limpiamos el formulario para la próxima vez
                     document.getElementById("clientName").value = '';
                     document.getElementById("clientLastName").value = '';
                 })
