@@ -126,6 +126,11 @@
 
         .btn-confirmar:hover { background-color: #059669; }
 
+        /* Estilos del autocompletado */
+        .autocomplete-container { position: relative; }
+        .autocomplete-results { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #cbd5e1; border-top: none; border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; z-index: 1000; list-style: none; padding: 0; margin: 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); display: none; }
+        .autocomplete-results li { padding: 10px 12px; cursor: pointer; font-size: 14px; color: #334155; border-bottom: 1px solid #f1f5f9; }
+        .autocomplete-results li:hover { background-color: #f8fafc; color: #3b82f6; font-weight: bold; }
 
     </style>
 </head>
@@ -144,10 +149,10 @@
         </header>
 
         <div class="filters-card">
-            <form th:action="@{/liquidations}" method="get" class="filters-form">
+            <form th:action="@{/liquidations}" method="get" class="filters-form" id="liquidationForm">
                 <div style="flex: 1;">
                     <label style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 8px; font-weight: 600;">REMATE</label>
-                    <select name="auctionId" onchange="this.form.submit()" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    <select name="auctionId" onchange="this.form.submit()" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; outline: none;">
                         <option value="">-- Seleccionar Remate --</option>
                         <option th:each="a : ${auctions}"
                                 th:value="${a.id}"
@@ -156,15 +161,22 @@
                     </select>
                 </div>
 
-                <div style="flex: 1;">
+                <!-- Buscador Dinámico de Clientes -->
+                <div style="flex: 1;" class="autocomplete-container">
                     <label style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 8px; font-weight: 600;">CLIENTE</label>
-                    <select name="clientId" onchange="this.form.submit()" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px;">
-                        <option value="">-- Todos los Clientes --</option>
-                        <option th:each="c : ${clients}"
-                                th:value="${c.id}"
-                                th:text="${c.name + ' ' + c.lastName}"
-                                th:selected="${c.id == selectedClientId}"></option>
-                    </select>
+
+                    <!-- Input oculto para enviar el ID -->
+                    <input type="hidden" name="clientId" id="searchClientId" th:value="${selectedClientId}">
+
+                    <!-- Recuperamos el nombre del cliente seleccionado sin tocar el Java -->
+                    <th:block th:each="c : ${clients}">
+                        <input th:if="${c.id == selectedClientId}" type="hidden" id="selectedClientName" th:value="${c.name + ' ' + c.lastName}">
+                    </th:block>
+
+                    <!-- Input visible de búsqueda -->
+                    <input type="text" id="clientSearch" placeholder="-- Todos los Clientes --" autocomplete="off"
+                           style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; outline: none; box-sizing: border-box;">
+                    <ul id="clientSearchResults" class="autocomplete-results"></ul>
                 </div>
 
                 <div th:if="${selectedAuctionId != null and !hasGenerated}">
@@ -241,6 +253,9 @@
         </form>
     </div>
 </div>
+
 <script th:src="@{/js/liquidations.js}"></script>
+<script th:src="@{/js/liquidations-clients.js}"></script>
+
 </body>
 </html>

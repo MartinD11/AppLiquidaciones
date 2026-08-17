@@ -22,14 +22,14 @@ public class LiquidationController {
     @GetMapping
     public String showDashboard(Model model,
                                 @RequestParam(required = false) Long auctionId,
-                                @RequestParam(required = false) Long clientId) { // Quitamos el defaultValue
+                                @RequestParam(required = false) Long clientId) {
 
         model.addAttribute("auctions", auctionService.findAll());
         model.addAttribute("clients", clientService.findAll());
 
         if (auctionId != null) {
             model.addAttribute("selectedAuctionId", auctionId);
-            model.addAttribute("selectedClientId", clientId); // Para que el Select mantenga el valor
+            model.addAttribute("selectedClientId", clientId);
 
             model.addAttribute("hasGenerated", liquidationService.hasLiquidationsForAuction(auctionId));
             model.addAttribute("liquidations", liquidationService.getFilteredLiquidations(auctionId, clientId));
