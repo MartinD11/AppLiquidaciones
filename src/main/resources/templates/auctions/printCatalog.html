@@ -36,7 +36,8 @@
                 display: none ;
             }
             body {
-                margin: 1.5cm
+                margin: 1.5cm;
+                font-size: 12px;
             }
         }
 
@@ -92,12 +93,12 @@
     </thead>
     <tbody>
     <tr th:each="p : ${productPage.content}" style="border-bottom: 1px solid #ddd;">
-        <td style="padding: 10px;" th:text="${p.lotNumber}"></td>
-        <td style="padding: 10px;" th:text="${p.name}"></td>
-        <td style="padding: 10px;" th:text="${'$' + #numbers.formatDecimal(p.basePrice, 1, 2)}"></td>
-        <td style="padding: 10px;" th:text="${p.buyer != null ? p.buyer.name : '-'}"></td>
-        <td style="padding: 10px;" th:text="${p.salePrice != null ? '$' + #numbers.formatDecimal(p.salePrice, 1, 2) : '-'}"></td>
-        <td style="padding: 10px;" th:text="${p.seller != null ? p.seller.name + ' ' + p.seller.lastName : '-'}"></td>
+        <td style="padding: 5px;" th:text="${p.lotNumber}"></td>
+        <td style="padding: 5px;" th:text="${p.name}"></td>
+        <td style="padding: 5px;" th:text="${'$' + #numbers.formatDecimal(p.basePrice, 1, 2)}"></td>
+        <td style="padding: 5px;" th:text="${p.buyer != null ? p.buyer.name : '-'}"></td>
+        <td style="padding: 5px;" th:text="${p.salePrice != null ? '$' + #numbers.formatDecimal(p.salePrice, 1, 2) : '-'}"></td>
+        <td style="padding: 5px;" th:text="${p.seller != null ? p.seller.name + ' ' + p.seller.lastName : '-'}"></td>
     </tr>
     </tbody>
 </table>
