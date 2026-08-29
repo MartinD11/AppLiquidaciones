@@ -42,7 +42,7 @@ mvn clean install
 # 4. Levantar el servidor
 mvn spring-boot:run
 
-👨‍💻 Autor
+Autor:
 Martín Dentaro
 
 [LinkedIn](https://www.linkedin.com/in/martin-dentaro-956034279/)
