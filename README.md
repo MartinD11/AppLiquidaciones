@@ -1,4 +1,4 @@
-# RematePro - Sistema de Gestión y Liquidación Offline 🔨
+# RematePro - Sistema de Gestión y Liquidación Offline 
 
 **RematePro** es un sistema integral de gestión empresarial diseñado específicamente para digitalizar y automatizar la operatoria contable de casas de subastas y remates (desarrollado originalmente para Remates Avellaneda). 
 
