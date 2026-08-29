@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             searchTimeout = setTimeout(() => {
-                fetch('/clients/search?q=' + encodeURIComponent(query))
+                fetch('/clients/search-historical?q=' + encodeURIComponent(query))
                     .then(response => response.json())
                     .then(clientes => {
                         clientSearchResults.innerHTML = '';

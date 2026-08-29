@@ -24,7 +24,6 @@ public class ClientController {
 
     @GetMapping("/new")
     public String showForm(Model model) {
-        System.out.println("¡BINGO! El clic llegó al controlador Java.");
         model.addAttribute("client", new ClientDTO());
         return "clients/form";
     }
@@ -64,5 +63,11 @@ public class ClientController {
     @ResponseBody
     public List<ClientDTO> searchClients(@RequestParam("q") String query) {
         return clientService.searchByNameOrLastName(query);
+    }
+
+    @GetMapping("/search-historical")
+    @ResponseBody
+    public List<ClientDTO> searchHistoricalClients(@RequestParam("q") String query) {
+        return clientService.searchHistorical(query);
     }
 }

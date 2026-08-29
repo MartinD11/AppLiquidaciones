@@ -29,10 +29,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientDTO> findAll() {
-        return  clientRepository.findAll().stream()
+        return clientRepository.findByActiveTrue().stream()
                 .map(client-> clientMapper.toClientDTO(client))
                 .collect(Collectors.toList());
-
     }
 
     @Override
@@ -52,11 +51,14 @@ public class ClientServiceImpl implements ClientService {
         return clientMapper.toClientDTO(clientRepository.save(client));
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
-        if(!clientRepository.existsById(id)) throw new ResourceNotFoundException("Client not found with ID: " + id);
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found with ID: " + id));
 
-        clientRepository.deleteById(id);
+        client.setActive(false);
+        clientRepository.save(client);
     }
 
     @Transactional(readOnly = true)
@@ -78,6 +80,16 @@ public class ClientServiceImpl implements ClientService {
         List<Client> clients = clientRepository.searchByFullName(query);
 
         return clients.stream()
+                .map(client -> clientMapper.toClientDTO(client))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ClientDTO> searchHistorical(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return List.of();
+        }
+        return clientRepository.searchHistoricalByFullName(query).stream()
                 .map(client -> clientMapper.toClientDTO(client))
                 .collect(Collectors.toList());
     }

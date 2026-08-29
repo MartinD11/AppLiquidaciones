@@ -14,6 +14,11 @@ public interface ClientRepository extends JpaRepository<Client,Long> {
 
     Optional<Client> findByNameAndLastName(String name, String lastName);
 
-    @Query("SELECT c FROM Client c WHERE LOWER(CONCAT(c.name, ' ', c.lastName)) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<Client> findByActiveTrue();
+
+    @Query("SELECT c FROM Client c WHERE LOWER(CONCAT(c.name, ' ', c.lastName)) LIKE LOWER(CONCAT('%', :query, '%')) AND c.active = true")
     List<Client> searchByFullName(@Param("query") String query);
+
+    @Query("SELECT c FROM Client c WHERE LOWER(CONCAT(c.name, ' ', c.lastName)) LIKE LOWER(CONCAT('%' , :query, '%'))")
+    List<Client> searchHistoricalByFullName(@Param("query") String query);
 }

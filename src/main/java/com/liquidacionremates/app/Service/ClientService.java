@@ -14,4 +14,6 @@ public interface ClientService {
     ClientDTO findByNameAndLastName(String name,String lastName);
 
     List<ClientDTO> searchByNameOrLastName(String query);
+
+    public List<ClientDTO> searchHistorical(String query);
 }

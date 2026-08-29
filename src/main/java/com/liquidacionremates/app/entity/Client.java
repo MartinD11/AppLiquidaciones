@@ -23,6 +23,9 @@ public class Client {
     @Column(nullable = false, length = 50)
     private String lastName;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 
