@@ -50,18 +50,19 @@ public class AuctionServiceImpl implements AuctionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Remate no encontrado con ID: " + id));
 
         List<Product> products = auction.getSoldProducts();
-        for(Product product:products){
+        for(Product product : products){
             product.setAuction(null);
         }
 
-        auctionRepository.delete(auction);
+        auction.setActive(false);
+        auctionRepository.save(auction);
     }
 
     @Transactional(readOnly = true)
     @Override
     public AuctionDTO findByDate(LocalDate date) {
-        Auction auction = auctionRepository.findByDate(date)
-                .orElseThrow(() -> new ResourceNotFoundException("No se encontró remate para la fecha: " + date));
+        Auction auction = auctionRepository.findByDateAndActiveTrue(date)
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró remate activo para la fecha: " + date));
 
         return auctionMapper.toAuctionDTO(auction);
     }
@@ -78,7 +79,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Transactional(readOnly = true)
     @Override
     public List<AuctionDTO> findAll() {
-        return auctionRepository.findAll().stream()
+        return auctionRepository.findByActiveTrue().stream()
                 .map(auctionMapper::toAuctionDTO)
                 .collect(Collectors.toList());
     }
@@ -101,5 +102,13 @@ public class AuctionServiceImpl implements AuctionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con ID: " + productId));
 
         product.setAuction(null);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<AuctionDTO> findAllHistorical() {
+        return auctionRepository.findAll().stream()
+                .map(auctionMapper::toAuctionDTO)
+                .collect(Collectors.toList());
     }
 }

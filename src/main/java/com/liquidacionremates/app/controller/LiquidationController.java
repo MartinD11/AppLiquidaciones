@@ -24,7 +24,7 @@ public class LiquidationController {
                                 @RequestParam(required = false) Long auctionId,
                                 @RequestParam(required = false) Long clientId) {
 
-        model.addAttribute("auctions", auctionService.findAll());
+        model.addAttribute("auctions", auctionService.findAllHistorical());
         model.addAttribute("clients", clientService.findAll());
 
         if (auctionId != null) {

@@ -21,6 +21,9 @@ public class Auction {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     @OneToMany(mappedBy = "auction")
     private List<Product> soldProducts = new ArrayList<>();
 

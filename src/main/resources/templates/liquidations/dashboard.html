@@ -161,14 +161,11 @@
                     </select>
                 </div>
 
-                <!-- Buscador Dinámico de Clientes -->
                 <div style="flex: 1;" class="autocomplete-container">
                     <label style="display: block; font-size: 0.8rem; color: #64748b; margin-bottom: 8px; font-weight: 600;">CLIENTE</label>
 
-                    <!-- Input oculto para enviar el ID -->
                     <input type="hidden" name="clientId" id="searchClientId" th:value="${selectedClientId}">
 
-                    <!-- Recuperamos el nombre del cliente seleccionado sin tocar el Java -->
                     <th:block th:each="c : ${clients}">
                         <input th:if="${c.id == selectedClientId}" type="hidden" id="selectedClientName" th:value="${c.name + ' ' + c.lastName}">
                     </th:block>

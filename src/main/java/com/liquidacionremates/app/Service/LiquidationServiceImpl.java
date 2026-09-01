@@ -3,6 +3,7 @@ package com.liquidacionremates.app.Service;
 import com.liquidacionremates.app.Repository.AuctionRepository;
 import com.liquidacionremates.app.Repository.LiquidationRepository;
 import com.liquidacionremates.app.Repository.ProductRepository;
+import com.liquidacionremates.app.dto.AuctionDTO;
 import com.liquidacionremates.app.dto.LiquidationDTO;
 import com.liquidacionremates.app.dto.LiquidationSummaryDTO;
 import com.liquidacionremates.app.entity.Auction;
@@ -12,6 +13,7 @@ import com.liquidacionremates.app.entity.Product;
 import com.liquidacionremates.app.enums.LiquidationStatus;
 import com.liquidacionremates.app.enums.ProductStatus;
 import com.liquidacionremates.app.exception.ResourceNotFoundException;
+import com.liquidacionremates.app.mapper.AuctionMapper;
 import com.liquidacionremates.app.mapper.LiquidationMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class LiquidationServiceImpl implements LiquidationService {
     private final ProductRepository productRepository;
     private final AuctionRepository auctionRepository;
     private final LiquidationMapper liquidationMapper;
+    private final AuctionMapper auctionMapper;
 
     @Transactional
     public void generateLiquidationsForAuction(Long auctionId) {
@@ -161,4 +164,5 @@ public class LiquidationServiceImpl implements LiquidationService {
     public boolean hasLiquidationsForAuction(Long auctionId) {
         return !liquidationRepository.findByAuctionId(auctionId).isEmpty();
     }
+
 }

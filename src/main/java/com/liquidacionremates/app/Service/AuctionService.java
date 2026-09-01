@@ -14,4 +14,5 @@ public interface AuctionService {
     List<AuctionDTO> findAll();
     void addProductsToAuction(Long auctionId,List<Long>productIds);
     void removeProductFromAuction(Long productId);
+    List<AuctionDTO> findAllHistorical();
 }

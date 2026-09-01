@@ -1,6 +1,7 @@
 package com.liquidacionremates.app.Service;
 
 
+import com.liquidacionremates.app.dto.AuctionDTO;
 import com.liquidacionremates.app.dto.LiquidationDTO;
 import com.liquidacionremates.app.dto.LiquidationSummaryDTO;
 import com.liquidacionremates.app.entity.Liquidation;
