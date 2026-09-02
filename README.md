@@ -14,7 +14,7 @@ El objetivo principal de esta aplicación es eliminar el error humano en el cál
 
 ## Stack Tecnológico
 
-*   **Backend:** Java 17, Spring Boot 3 (Spring Web, Spring Data JPA).
+*   **Backend:** Java 21, Spring Boot 4 (Spring Web, Spring Data JPA).
 *   **Base de Datos:** H2 Database Engine (modo archivo persistente local).
 *   **Frontend:** HTML5, CSS3, JavaScript Vanilla, Thymeleaf (Server-Side Rendering).
 *   **Despliegue:** Maven, Launch4j (preparado para empaquetado como ejecutable `.exe` nativo de Windows).
