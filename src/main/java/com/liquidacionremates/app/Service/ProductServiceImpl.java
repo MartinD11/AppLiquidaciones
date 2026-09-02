@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     @Override
     public List<ProductDTO> findAll() {
-        return productRepository.findAll().stream()
+        return productRepository.findByActiveTrue().stream()
                 .map(productMapper::toProductDTO)
                 .collect(Collectors.toList());
     }
@@ -103,8 +103,11 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public void delete(Long id) {
-        if(!productRepository.existsById(id)) throw new ResourceNotFoundException("Product not found with ID: " + id);
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
+
+        product.setActive(false);
+        productRepository.save(product);
     }
 
     @Transactional(readOnly = true)
@@ -130,7 +133,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     @Override
     public List<ProductDTO> findAvailableProducts() {
-        return productRepository.findByStatusAndAuctionIsNull(ProductStatus.NOT_SOLD)
+        return productRepository.findByStatusAndAuctionIsNullAndActiveTrue(ProductStatus.NOT_SOLD)
                 .stream()
                 .map(productMapper::toProductDTO)
                 .collect(Collectors.toList());
@@ -170,7 +173,7 @@ public class ProductServiceImpl implements ProductService {
         if (query == null || query.trim().isEmpty()) {
             return List.of();
         }
-        return productRepository.findByNameContainingIgnoreCase(query).stream()
+        return productRepository.findByNameContainingIgnoreCaseAndActiveTrue(query).stream()
                 .map(productMapper::toProductDTO)
                 .collect(Collectors.toList());
     }

@@ -32,6 +32,9 @@ public class Product {
     @Column(nullable = false, length = 20)
     private ProductStatus status = ProductStatus.NOT_SOLD;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
     private Client seller;

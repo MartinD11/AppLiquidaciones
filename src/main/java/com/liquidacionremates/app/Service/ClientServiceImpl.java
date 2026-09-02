@@ -47,7 +47,7 @@ public class ClientServiceImpl implements ClientService {
             Client client = existingClient.get();
 
             if (!client.getActive()) {
-                //si estaba ay eliminado, los volvemos a poner como activo
+                //si estaba ya eliminado, los volvemos a poner como activo
                 client.setActive(true);
                 return clientMapper.toClientDTO(clientRepository.save(client));
             }
