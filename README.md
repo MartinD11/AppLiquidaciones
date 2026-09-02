@@ -27,7 +27,7 @@ El proyecto está construido bajo una arquitectura monolítica clásica, prioriz
 
 ## Instalación y Ejecución Local
 
-Para clonar y probar este proyecto en un entorno de desarrollo, es necesario contar con Java 17 y Maven instalados.
+Para clonar y probar este proyecto en un entorno de desarrollo, es necesario contar con Java 21 y Maven instalados.
 
 ```bash
 # 1. Clonar el repositorio
