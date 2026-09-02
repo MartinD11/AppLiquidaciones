@@ -21,4 +21,6 @@ public interface ClientRepository extends JpaRepository<Client,Long> {
 
     @Query("SELECT c FROM Client c WHERE LOWER(CONCAT(c.name, ' ', c.lastName)) LIKE LOWER(CONCAT('%' , :query, '%'))")
     List<Client> searchHistoricalByFullName(@Param("query") String query);
+
+    Optional<Client> findByNameIgnoreCaseAndLastNameIgnoreCase(String name, String lastName);
 }

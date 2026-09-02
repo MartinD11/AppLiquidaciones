@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +35,30 @@ public class ClientServiceImpl implements ClientService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public ClientDTO save(ClientDTO clientDTO) {
-        Client client = clientMapper.toEntity(clientDTO);
-        return clientMapper.toClientDTO(clientRepository.save(client));
+        String name = clientDTO.getName().trim();
+        String lastName = clientDTO.getLastName().trim();
+
+        Optional<Client> existingClient = clientRepository.findByNameIgnoreCaseAndLastNameIgnoreCase(name, lastName);
+
+        if (existingClient.isPresent()) {
+            Client client = existingClient.get();
+
+            if (!client.getActive()) {
+                //si estaba ay eliminado, los volvemos a poner como activo
+                client.setActive(true);
+                return clientMapper.toClientDTO(clientRepository.save(client));
+            }
+
+            return clientMapper.toClientDTO(client);
+        }
+
+        // si es nuevo, lo creamos desde cero.
+        Client newClient = clientMapper.toEntity(clientDTO);
+        newClient.setActive(true);
+        return clientMapper.toClientDTO(clientRepository.save(newClient));
     }
 
     @Override
