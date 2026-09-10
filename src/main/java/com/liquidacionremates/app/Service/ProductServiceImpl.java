@@ -9,14 +9,18 @@ import com.liquidacionremates.app.entity.Auction;
 import com.liquidacionremates.app.entity.Client;
 import com.liquidacionremates.app.entity.Product;
 import com.liquidacionremates.app.enums.ProductStatus;
+import com.liquidacionremates.app.exception.InvalidExcelException;
 import com.liquidacionremates.app.exception.ResourceNotFoundException;
 import com.liquidacionremates.app.mapper.ProductMapper;
+import com.liquidacionremates.app.utils.ExcelHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final ClientRepository clientRepository;
     private final AuctionRepository auctionRepository;
+    private final ExcelHelper excelHelper;
 
     @Transactional(readOnly = true)
     @Override
@@ -188,4 +193,57 @@ public class ProductServiceImpl implements ProductService {
                 .map(productMapper::toProductDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public void importProductsFromExcel(MultipartFile file) {
+        // 1. Validación de negocio: Lanzamos tu excepción personalizada si no hay archivo
+        if (file == null || file.isEmpty()) {
+            throw new InvalidExcelException("El archivo Excel está vacío o no fue seleccionado.");
+        }
+
+        try {
+            // 2. Delegamos la lectura al helper que construimos antes
+            List<ProductDTO> productDTOs = excelHelper.parseExcelFile(file.getInputStream());
+
+            // 3. Iteramos sobre los DTOs limpios para convertirlos en entidades
+            for (ProductDTO dto : productDTOs) {
+                Product product = new Product();
+                product.setName(dto.getName());
+                product.setLotNumber(dto.getLotNumber());
+                product.setBasePrice(dto.getBasePrice());
+
+                // Estado por defecto para los lotes recién ingresados
+                product.setStatus(ProductStatus.NOT_SOLD);
+                product.setActive(true);
+
+                // 4. Lógica de asociación de clientes (Vendedores)
+                if (dto.getSeller() != null && dto.getSeller().getName() != null) {
+                    String sellerName = dto.getSeller().getName();
+
+                    // Buscamos si el vendedor ya está en la base de datos
+                    Client client = clientRepository.findByNameContainingIgnoreCase(sellerName)
+                            .stream()
+                            .findFirst()
+                            .orElseGet(() -> {
+                                // Si no existe, creamos uno nuevo automáticamente para no frenar la importación del remate
+                                Client newClient = new Client();
+                                newClient.setName(sellerName);
+                                // Podés setear otros valores por defecto acá si tu entidad lo requiere
+                                return clientRepository.save(newClient);
+                            });
+
+                    product.setSeller(client);
+                }
+
+                // 5. Guardamos el producto definitivo
+                productRepository.save(product);
+            }
+
+        } catch (IOException e) {
+            // Si Apache POI falla al leer el stream, lo transformamos en tu excepción de negocio
+            throw new InvalidExcelException("Ocurrió un problema al leer el formato del archivo: " + e.getMessage());
+        }
+    }
+
 }

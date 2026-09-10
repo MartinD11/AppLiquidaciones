@@ -6,6 +6,7 @@ import com.liquidacionremates.app.entity.Product;
 import com.liquidacionremates.app.enums.ProductStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,4 +28,6 @@ public interface ProductService {
     Page<ProductDTO> getProductsByAuctionPaged(Long auctionId, Pageable pageable);
     List<ProductDTO> searchByNameList(String query);
     List<ProductDTO> findByLotNumber(Integer lotNumber);
+
+    void importProductsFromExcel(MultipartFile file);
 }

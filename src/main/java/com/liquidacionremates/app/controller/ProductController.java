@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -83,6 +85,16 @@ public class ProductController {
     @ResponseBody
     public List<ProductDTO> searchProductsAjax(@RequestParam("q") String query) {
         return productService.searchByNameList(query);
+    }
+
+    @PostMapping("/import")
+    public String importProducts(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+
+        productService.importProductsFromExcel(file);
+
+        redirectAttributes.addFlashAttribute("success","Lotes importados correctamente");
+
+        return "redirect:/inventory";
     }
 
 }

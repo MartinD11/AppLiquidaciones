@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,4 +24,6 @@ public interface ClientRepository extends JpaRepository<Client,Long> {
     List<Client> searchHistoricalByFullName(@Param("query") String query);
 
     Optional<Client> findByNameIgnoreCaseAndLastNameIgnoreCase(String name, String lastName);
+
+    Collection<Client> findByNameContainingIgnoreCase(String sellerName);
 }
