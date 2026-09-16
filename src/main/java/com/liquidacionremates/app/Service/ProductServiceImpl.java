@@ -197,51 +197,41 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void importProductsFromExcel(MultipartFile file) {
-        // 1. Validación de negocio: Lanzamos tu excepción personalizada si no hay archivo
         if (file == null || file.isEmpty()) {
             throw new InvalidExcelException("El archivo Excel está vacío o no fue seleccionado.");
         }
 
         try {
-            // 2. Delegamos la lectura al helper que construimos antes
             List<ProductDTO> productDTOs = excelHelper.parseExcelFile(file.getInputStream());
 
-            // 3. Iteramos sobre los DTOs limpios para convertirlos en entidades
             for (ProductDTO dto : productDTOs) {
                 Product product = new Product();
                 product.setName(dto.getName());
                 product.setLotNumber(dto.getLotNumber());
                 product.setBasePrice(dto.getBasePrice());
 
-                // Estado por defecto para los lotes recién ingresados
                 product.setStatus(ProductStatus.NOT_SOLD);
                 product.setActive(true);
 
-                // 4. Lógica de asociación de clientes (Vendedores)
                 if (dto.getSeller() != null && dto.getSeller().getName() != null) {
                     String sellerName = dto.getSeller().getName();
 
-                    // Buscamos si el vendedor ya está en la base de datos
                     Client client = clientRepository.findByNameContainingIgnoreCase(sellerName)
                             .stream()
                             .findFirst()
                             .orElseGet(() -> {
-                                // Si no existe, creamos uno nuevo automáticamente para no frenar la importación del remate
                                 Client newClient = new Client();
                                 newClient.setName(sellerName);
-                                // Podés setear otros valores por defecto acá si tu entidad lo requiere
                                 return clientRepository.save(newClient);
                             });
 
                     product.setSeller(client);
                 }
 
-                // 5. Guardamos el producto definitivo
                 productRepository.save(product);
             }
 
         } catch (IOException e) {
-            // Si Apache POI falla al leer el stream, lo transformamos en tu excepción de negocio
             throw new InvalidExcelException("Ocurrió un problema al leer el formato del archivo: " + e.getMessage());
         }
     }
