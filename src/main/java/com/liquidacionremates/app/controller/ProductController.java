@@ -94,7 +94,7 @@ public class ProductController {
 
         redirectAttributes.addFlashAttribute("success","Lotes importados correctamente");
 
-        return "redirect:/inventory";
+        return "redirect:/products";
     }
 
 }

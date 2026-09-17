@@ -205,26 +205,31 @@ public class ProductServiceImpl implements ProductService {
             List<ProductDTO> productDTOs = excelHelper.parseExcelFile(file.getInputStream());
 
             for (ProductDTO dto : productDTOs) {
+
+                boolean isNameEmpty = dto.getName() == null || dto.getName().trim().isEmpty();
+                boolean isSellerEmpty = dto.getSeller() == null || dto.getSeller().getName() == null || dto.getSeller().getName().trim().isEmpty();
+
+                if (isNameEmpty && isSellerEmpty) {
+                    continue;
+                }
+
                 Product product = new Product();
-                product.setName(dto.getName());
+                product.setName(isNameEmpty ? "Producto sin nombre" : dto.getName().trim());
                 product.setLotNumber(dto.getLotNumber());
                 product.setBasePrice(dto.getBasePrice());
-
                 product.setStatus(ProductStatus.NOT_SOLD);
                 product.setActive(true);
 
-                if (dto.getSeller() == null || dto.getSeller().getName() == null || dto.getSeller().getName().trim().isEmpty()) {
-                    throw new InvalidExcelException("Error en el Lote " + dto.getLotNumber() + ": El producto '" + dto.getName() + "' no tiene un dueño asignado en el Excel.");
-                }
+                String fullExcelName = isSellerEmpty ? "A CONFIRMAR" : dto.getSeller().getName().trim();
 
-                String sellerName = dto.getSeller().getName().trim();
-
-                Client client = clientRepository.findByNameContainingIgnoreCase(sellerName)
+                Client client = clientRepository.findByFullName(fullExcelName)
                         .stream()
                         .findFirst()
                         .orElseGet(() -> {
                             Client newClient = new Client();
-                            newClient.setName(sellerName);
+                            String[] nameParts = fullExcelName.split(" ", 2);
+                            newClient.setName(nameParts[0]);
+                            newClient.setLastName(nameParts.length > 1 ? nameParts[1] : "");
                             return clientRepository.save(newClient);
                         });
 
@@ -233,7 +238,7 @@ public class ProductServiceImpl implements ProductService {
             }
 
         } catch (IOException e) {
-            throw new InvalidExcelException("Ocurrió un problema al leer el formato del archivo: " + e.getMessage());
+            throw new InvalidExcelException("Ocurrió un problema al leer el archivo: " + e.getMessage());
         }
     }
 

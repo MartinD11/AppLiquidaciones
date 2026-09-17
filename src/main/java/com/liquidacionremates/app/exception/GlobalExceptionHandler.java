@@ -23,6 +23,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BaseException.class)
     public String handleBaseException(BaseException ex, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("error", ex.getMessage());
-        return "redirect:/inventory";
+        return "redirect:/products";
     }
 }

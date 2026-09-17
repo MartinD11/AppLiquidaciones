@@ -30,51 +30,58 @@ public class ExcelHelper {
 
                 if (rowNumber == 0) {
                     rowNumber++;
-                    continue;
+                    continue; // Salteamos la cabecera
                 }
 
-                if (isRowEmpty(currentRow)) {
+                Cell lotCell = currentRow.getCell(0);
+                Cell nameCell = currentRow.getCell(1);
+                Cell sellerCell = currentRow.getCell(5);
+
+                String lotStr = lotCell != null ? formatter.formatCellValue(lotCell).trim() : "";
+                String productName = nameCell != null ? formatter.formatCellValue(nameCell).trim() : "";
+                String sellerName = sellerCell != null ? formatter.formatCellValue(sellerCell).trim() : "";
+
+                if (productName.isEmpty() && sellerName.isEmpty()) {
                     continue;
                 }
 
                 ProductDTO productDTO = new ProductDTO();
 
-                String lotStr = formatter.formatCellValue(currentRow.getCell(0)).trim();
                 if (!lotStr.isEmpty()) {
                     try {
                         productDTO.setLotNumber(Integer.parseInt(lotStr.replaceAll("[^0-9]", "")));
                     } catch (NumberFormatException e) {
-                        productDTO.setLotNumber(null);
+                        productDTO.setLotNumber(0);
                     }
+                } else {
+                    productDTO.setLotNumber(0); // Por si se olvidan de ponerle número a un lote real
                 }
 
-                Cell nameCell = currentRow.getCell(1);
-                if (nameCell != null) {
-                    productDTO.setName(formatter.formatCellValue(nameCell).trim());
-                }
+                productDTO.setName(productName.isEmpty() ? "S/N" : productName);
 
-                String priceStr = formatter.formatCellValue(currentRow.getCell(2)).trim()
-                        .replace("$", "")
-                        .replace(".", "")
-                        .replace(",", ".");
-                if (!priceStr.isEmpty()) {
-                    try {
-                        productDTO.setBasePrice(new BigDecimal(priceStr));
-                    } catch (NumberFormatException e) {
+                Cell baseCell = currentRow.getCell(2);
+                if (baseCell != null) {
+                    String priceStr = formatter.formatCellValue(baseCell).trim()
+                            .replace("$", "")
+                            .replace(".", "")
+                            .replace(",", ".");
+                    if (!priceStr.isEmpty()) {
+                        try {
+                            productDTO.setBasePrice(new BigDecimal(priceStr));
+                        } catch (NumberFormatException e) {
+                            productDTO.setBasePrice(BigDecimal.ZERO);
+                        }
+                    } else {
                         productDTO.setBasePrice(BigDecimal.ZERO);
                     }
                 } else {
                     productDTO.setBasePrice(BigDecimal.ZERO);
                 }
 
-                Cell sellerCell = currentRow.getCell(5);
-                if (sellerCell != null) {
-                    String sellerName = formatter.formatCellValue(sellerCell).trim();
-                    if (!sellerName.isEmpty()) {
-                        Client tempClient = new Client();
-                        tempClient.setName(sellerName);
-                        productDTO.setSeller(tempClient);
-                    }
+                if (!sellerName.isEmpty()) {
+                    Client tempClient = new Client();
+                    tempClient.setName(sellerName);
+                    productDTO.setSeller(tempClient);
                 }
 
                 products.add(productDTO);
@@ -85,16 +92,5 @@ public class ExcelHelper {
         }
 
         return products;
-    }
-
-    private boolean isRowEmpty(Row row) {
-        if (row == null) return true;
-        for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
-            Cell cell = row.getCell(c);
-            if (cell != null && cell.getCellType() != CellType.BLANK) {
-                return false;
-            }
-        }
-        return true;
     }
 }

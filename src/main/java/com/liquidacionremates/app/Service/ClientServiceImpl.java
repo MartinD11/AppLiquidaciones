@@ -98,7 +98,7 @@ public class ClientServiceImpl implements ClientService {
             return List.of();
         }
 
-        List<Client> clients = clientRepository.searchByFullName(query);
+        List<Client> clients = clientRepository.findByFullName(query);
 
         return clients.stream()
                 .map(client -> clientMapper.toClientDTO(client))
