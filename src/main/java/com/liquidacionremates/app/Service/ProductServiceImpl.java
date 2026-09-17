@@ -213,21 +213,22 @@ public class ProductServiceImpl implements ProductService {
                 product.setStatus(ProductStatus.NOT_SOLD);
                 product.setActive(true);
 
-                if (dto.getSeller() != null && dto.getSeller().getName() != null) {
-                    String sellerName = dto.getSeller().getName();
-
-                    Client client = clientRepository.findByNameContainingIgnoreCase(sellerName)
-                            .stream()
-                            .findFirst()
-                            .orElseGet(() -> {
-                                Client newClient = new Client();
-                                newClient.setName(sellerName);
-                                return clientRepository.save(newClient);
-                            });
-
-                    product.setSeller(client);
+                if (dto.getSeller() == null || dto.getSeller().getName() == null || dto.getSeller().getName().trim().isEmpty()) {
+                    throw new InvalidExcelException("Error en el Lote " + dto.getLotNumber() + ": El producto '" + dto.getName() + "' no tiene un dueño asignado en el Excel.");
                 }
 
+                String sellerName = dto.getSeller().getName().trim();
+
+                Client client = clientRepository.findByNameContainingIgnoreCase(sellerName)
+                        .stream()
+                        .findFirst()
+                        .orElseGet(() -> {
+                            Client newClient = new Client();
+                            newClient.setName(sellerName);
+                            return clientRepository.save(newClient);
+                        });
+
+                product.setSeller(client);
                 productRepository.save(product);
             }
 
