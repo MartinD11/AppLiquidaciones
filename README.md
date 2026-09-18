@@ -1,6 +1,6 @@
-# RematePro - Sistema de Gestión y Liquidación Offline 
+# RematePro - Sistema de Gestión y Liquidación Offline
 
-**RematePro** es un sistema integral de gestión empresarial diseñado específicamente para digitalizar y automatizar la operatoria contable de casas de subastas y remates (desarrollado originalmente para Remates Avellaneda). 
+**RematePro** es un sistema integral de gestión empresarial diseñado específicamente para digitalizar y automatizar la operatoria contable de casas de subastas y remates (desarrollado originalmente para Remates Avellaneda).
 
 El objetivo principal de esta aplicación es eliminar el error humano en el cálculo de comisiones post-evento, acelerar la administración de lotes y proporcionar una herramienta financiera robusta que funcione 100% offline.
 
@@ -8,6 +8,10 @@ El objetivo principal de esta aplicación es eliminar el error humano en el cál
 
 *   **Liquidaciones Financieras Automatizadas:** Cruzamiento de datos post-remate para agrupar ventas por cliente, deducir automáticamente porcentajes de retención y generar estados de cuenta (`Pendiente` / `Pagada`).
 *   **Gestión de Inventario y Lotes:** Seguimiento en tiempo real de productos, control de estados (`No Vendido`, `Vendido`) y asignación rápida de compradores y precios de bajada durante la subasta.
+*   **Importación Masiva de Excel con Tolerancia a Fallos:** Incorporación masiva de lotes vía archivos `.xlsx` mediante Apache POI. El algoritmo de lectura (`ExcelHelper`) cuenta con un filtro "anti-basura" robusto que:
+    *   Ignora automáticamente filas vacías o con arrastre de datos fantasma generadas por el autocompletado de Excel.
+    *   Maneja de forma inteligente la ausencia de vendedores asignando un estado "A CONFIRMAR".
+    *   Asigna identificadores numéricos seguros (`0`) cuando el usuario olvida cargar el número de lote.
 *   **CRM Integrado (Borrado Lógico):** Administración de compradores y vendedores. Implementa borrado lógico (`active = false`) para ocultar clientes inactivos en nuevas operaciones sin romper el historial contable de remates anteriores.
 *   **Buscadores Dinámicos (AJAX):** Filtrado asíncrono en el frontend mediante `Fetch API` para buscar clientes históricos y productos sin necesidad de recargar el DOM.
 *   **Generación de Catálogos Impresos:** Vistas limpias optimizadas con reglas CSS (`@media print`) para generar PDFs o imprimir directamente los catálogos en papel.
