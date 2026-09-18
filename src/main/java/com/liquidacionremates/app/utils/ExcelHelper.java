@@ -30,7 +30,7 @@ public class ExcelHelper {
 
                 if (rowNumber == 0) {
                     rowNumber++;
-                    continue; // Salteamos la cabecera
+                    continue;
                 }
 
                 Cell lotCell = currentRow.getCell(0);
@@ -54,7 +54,7 @@ public class ExcelHelper {
                         productDTO.setLotNumber(0);
                     }
                 } else {
-                    productDTO.setLotNumber(0); // Por si se olvidan de ponerle número a un lote real
+                    productDTO.setLotNumber(0);
                 }
 
                 productDTO.setName(productName.isEmpty() ? "S/N" : productName);
