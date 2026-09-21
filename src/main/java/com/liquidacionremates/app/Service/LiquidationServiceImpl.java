@@ -21,6 +21,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +65,8 @@ public class LiquidationServiceImpl implements LiquidationService {
                     .map(Product::getSalePrice)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            BigDecimal retainedCommission = totalSold.multiply(commissionMultiplier);
-            BigDecimal netToPay = totalSold.subtract(retainedCommission);
+            BigDecimal retainedCommission = totalSold.multiply(commissionMultiplier).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal netToPay = totalSold.subtract(retainedCommission).setScale(2, RoundingMode.HALF_UP);
 
             Liquidation liquidation = new Liquidation();
             liquidation.setAuction(auction);
