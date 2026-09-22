@@ -19,7 +19,6 @@
         .tabla-card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-top: 20px; }
         .btn-nuevo { background: #111c2d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; transition: 0.2s;}
 
-        /* Estilos de la nueva barra de búsqueda rápida */
         .search-card { background: white; border-radius: 10px; padding: 15px 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-top: 20px; display: flex; align-items: center; }
         .search-card input { width: 100%; border: none; outline: none; padding: 5px 10px; font-size: 15px; color: #334155; background: transparent; }
         .search-card input::placeholder { color: #94a3b8; }
@@ -42,7 +41,6 @@
     <div class="content-area">
         <a th:href="@{/clients/new}" class="btn-nuevo"><i class="fa-solid fa-plus"></i> Nuevo Cliente</a>
 
-        <!-- Nueva Barra de Búsqueda Rápida (Frontend Filtering) -->
         <div class="search-card">
             <i class="fa-solid fa-search" style="color: #a0aec0;"></i>
             <input type="text" id="clientTableSearch" placeholder="Buscar cliente rápido por nombre o apellido..." autocomplete="off">

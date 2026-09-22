@@ -7,7 +7,6 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Estilos específicos de esta vista que no están en style.css -->
     <style>
         .filters-form { display: flex; gap: 20px; align-items: flex-end; }
         .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
@@ -66,7 +65,7 @@
                 </div>
 
                 <div th:if="${selectedAuctionId != null and !hasGenerated}" style="margin-bottom: 2px;">
-                    <button type="submit" formaction="/liquidations/generate" formmethod="post" class="btn-submit" style="background-color: #f59e0b; width: auto;">
+                    <button type="submit" th:formaction="@{/liquidations/generate}" formmethod="post" class="btn-submit" style="background-color: #f59e0b; width: auto;">
                         <i class="fa-solid fa-gears"></i> Generar
                     </button>
                 </div>
@@ -124,7 +123,6 @@
     </div>
 </div>
 
-<!-- Modal nativo de tu CSS -->
 <div id="modalPago" class="modal-overlay">
     <div class="modal-content">
         <span class="close-btn" onclick="cerrarModalPago()">&times;</span>
