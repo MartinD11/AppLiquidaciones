@@ -5,6 +5,7 @@ import com.liquidacionremates.app.Repository.ProductRepository;
 import com.liquidacionremates.app.dto.AuctionDTO;
 import com.liquidacionremates.app.entity.Auction;
 import com.liquidacionremates.app.entity.Product;
+import com.liquidacionremates.app.enums.ProductStatus;
 import com.liquidacionremates.app.exception.ResourceNotFoundException;
 import com.liquidacionremates.app.mapper.AuctionMapper;
 import lombok.RequiredArgsConstructor;
@@ -102,6 +103,11 @@ public class AuctionServiceImpl implements AuctionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con ID: " + productId));
 
         product.setAuction(null);
+
+        product.setBuyer(null);
+        product.setSalePrice(null);
+
+        product.setStatus(ProductStatus.NOT_SOLD);
     }
 
     @Transactional(readOnly = true)

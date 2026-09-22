@@ -157,4 +157,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch(err => console.error("Error al guardar cliente:", err));
         });
     }
+
+    // Modal para Quitar Lote del Remate
+    const removeLoteModal = document.getElementById("removeLoteModal");
+    const closeRemoveLoteBtn = document.getElementById("closeRemoveLoteBtn");
+    const confirmRemoveLoteBtn = document.getElementById("confirmRemoveLoteBtn");
+    const removeLoteName = document.getElementById("removeLoteName");
+
+    if (removeLoteModal) {
+        document.querySelectorAll(".btn-quitar-lote").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const url = this.getAttribute("data-url");
+                const name = this.getAttribute("data-name");
+
+                removeLoteName.textContent = name;
+                confirmRemoveLoteBtn.setAttribute("href", url);
+                removeLoteModal.style.display = "flex";
+            });
+        });
+
+        closeRemoveLoteBtn.addEventListener("click", () => removeLoteModal.style.display = "none");
+
+        window.addEventListener("click", function (event) {
+            if (event.target === removeLoteModal) {
+                removeLoteModal.style.display = "none";
+            }
+        });
+    }
 });
