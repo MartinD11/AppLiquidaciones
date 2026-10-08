@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LiquidationRepository extends JpaRepository<Liquidation, Long> {
@@ -19,4 +20,6 @@ public interface LiquidationRepository extends JpaRepository<Liquidation, Long> 
 
     @Query("SELECT l FROM Liquidation l WHERE l.auction.id = :auctionId AND (:clientId IS NULL OR l.client.id = :clientId)")
     List<Liquidation> findByAuctionIdAndOptionalClient(@Param("auctionId") Long auctionId, @Param("clientId") Long clientId);
+
+    Optional<Liquidation> findByAuctionIdAndClientId(Long auctionId, Long clientId);
 }

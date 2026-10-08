@@ -38,6 +38,12 @@
     </header>
 
     <div class="content-area">
+        <div th:if="${success}" class="alert alert-success" style="background-color: #d1fae5; color: #065f46; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #34d399;">
+            <i class="fa-solid fa-circle-check"></i> <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="alert alert-danger" style="background-color: #fee2e2; color: #991b1b; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #f87171;">
+            <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+        </div>
 
         <div class="form-card" style="max-width: 100%; margin-top: 0; margin-bottom: 20px;">
             <form th:action="@{/liquidations}" method="get" class="filters-form" id="liquidationForm">
@@ -63,10 +69,9 @@
                     <input type="text" id="clientSearch" placeholder="-- Todos los Clientes --" autocomplete="off">
                     <ul id="clientSearchResults" class="autocomplete-results"></ul>
                 </div>
-
-                <div th:if="${selectedAuctionId != null and !hasGenerated}" style="margin-bottom: 2px;">
-                    <button type="submit" th:formaction="@{/liquidations/generate}" formmethod="post" class="btn-submit" style="background-color: #f59e0b; width: auto;">
-                        <i class="fa-solid fa-gears"></i> Generar
+                <div th:if="${selectedAuctionId != null}" style="margin-bottom: 2px;">
+                    <button type="submit" th:formaction="@{/liquidations/generate}" formmethod="post" class="btn-submit" style="background-color: #3b82f6; width: auto;" title="Genera nuevas liquidaciones o actualiza las existentes con ventas nuevas">
+                        <i class="fa-solid fa-arrows-rotate"></i> Generar / Actualizar
                     </button>
                 </div>
             </form>

@@ -56,3 +56,7 @@ insert into liquidations (auction_id,client_id,commission_percentage,generation_
 org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"
 Value too long for column "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"; SQL statement:
 insert into liquidations (auction_id,client_id,commission_percentage,generation_date,net_to_pay,retained_commission,status,total_sold,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
+2026-10-08 18:53:57.234577-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "NET_TO_PAY NUMERIC(10, 2)": "4089189590410.50 (15)"
+Value too long for column "NET_TO_PAY NUMERIC(10, 2)": "4089189590410.50 (15)"; SQL statement:
+update liquidations set auction_id=?,client_id=?,commission_percentage=?,generation_date=?,net_to_pay=?,retained_commission=?,status=?,total_sold=? where id=? [22001-240]

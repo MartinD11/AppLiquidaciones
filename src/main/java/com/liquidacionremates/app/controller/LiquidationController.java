@@ -42,8 +42,8 @@ public class LiquidationController {
     public String generateLiquidations(@RequestParam Long auctionId, RedirectAttributes redirectAttributes) {
         try {
             liquidationService.generateLiquidationsForAuction(auctionId);
-            redirectAttributes.addFlashAttribute("success", "¡Liquidaciones generadas con éxito!");
-        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("success", "¡Liquidaciones generadas/actualizadas con éxito!");
+        } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
