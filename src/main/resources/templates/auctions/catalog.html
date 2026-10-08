@@ -150,7 +150,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="product : ${auction.soldProducts}">
+                <tr th:each="product : ${auction.soldProducts}" th:id="'lote-' + ${product.id}">
                     <td th:text="${product.lotNumber}">1</td>
                     <td class="col-producto" th:text="${product.name}">...</td>
                     <td th:text="${product.basePrice}"></td>

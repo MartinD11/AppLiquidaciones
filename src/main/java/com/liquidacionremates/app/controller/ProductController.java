@@ -78,7 +78,7 @@ public class ProductController {
                              @RequestParam(required = false) Long buyerId,
                              @RequestParam Long auctionId) {
         productService.updateSaleData(id, salePrice, status, buyerId);
-        return "redirect:/auctions/" + auctionId + "/catalog";
+        return "redirect:/auctions/" + auctionId + "/catalog#lote-" + id;
     }
 
     @GetMapping("/search-ajax")
