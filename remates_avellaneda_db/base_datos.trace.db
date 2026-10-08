@@ -36,3 +36,23 @@ Caused by: java.lang.AssertionError: 10
 	at org.h2.mvstore.FileStore.executeFileStoreOperation(FileStore.java:1894)
 	at org.h2.mvstore.MVStore.executeFilestoreOperation(MVStore.java:1044)
 	... 13 more
+2026-10-08 18:03:17.630639-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"
+Value too long for column "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"; SQL statement:
+insert into liquidations (auction_id,client_id,commission_percentage,generation_date,net_to_pay,retained_commission,status,total_sold,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
+2026-10-08 18:03:20.095223-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"
+Value too long for column "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"; SQL statement:
+insert into liquidations (auction_id,client_id,commission_percentage,generation_date,net_to_pay,retained_commission,status,total_sold,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
+2026-10-08 18:03:20.837931-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"
+Value too long for column "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"; SQL statement:
+insert into liquidations (auction_id,client_id,commission_percentage,generation_date,net_to_pay,retained_commission,status,total_sold,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
+2026-10-08 18:03:21.117213-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"
+Value too long for column "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"; SQL statement:
+insert into liquidations (auction_id,client_id,commission_percentage,generation_date,net_to_pay,retained_commission,status,total_sold,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
+2026-10-08 18:03:21.295237-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Valor demasiado largo para la columna "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"
+Value too long for column "TOTAL_SOLD NUMERIC(10, 2)": "101031413.00 (11)"; SQL statement:
+insert into liquidations (auction_id,client_id,commission_percentage,generation_date,net_to_pay,retained_commission,status,total_sold,id) values (?,?,?,?,?,?,?,?,default) [22001-240]
