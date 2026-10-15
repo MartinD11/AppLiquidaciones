@@ -102,6 +102,71 @@
             color: #3b82f6;
             font-weight: bold;
         }
+
+        /* --- TARJETAS KPI DE RECAUDACIÓN Y ESTADÍSTICAS --- */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .kpi-card {
+            background: #ffffff;
+            padding: 16px 20px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .kpi-card.kpi-recaudado {
+            border-left: 5px solid #10b981; /* Verde esmeralda para el dinero */
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+        }
+
+        .kpi-card.kpi-total {
+            border-left: 5px solid #3b82f6;
+        }
+
+        .kpi-card.kpi-vendidos {
+            border-left: 5px solid #8b5cf6;
+        }
+
+        .kpi-icon {
+            font-size: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .kpi-recaudado .kpi-icon { background: #dcfce7; color: #16a34a; }
+        .kpi-total .kpi-icon { background: #dbeafe; color: #2563eb; }
+        .kpi-vendidos .kpi-icon { background: #f3e8ff; color: #9333ea; }
+
+        .kpi-data {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+        }
     </style>
 </head>
 <body>
@@ -131,6 +196,41 @@
                     <i class="fa-solid fa-arrow-left"></i> Volver
                 </a>
             </div>
+        </div>
+
+        <div class="kpi-container">
+
+            <div class="kpi-card kpi-total">
+                <div class="kpi-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-label">Total Lotes</span>
+                    <span class="kpi-value" th:text="${auction.soldProducts.size()}">0</span>
+                </div>
+            </div>
+
+            <div class="kpi-card kpi-vendidos">
+                <div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-label">Lotes Vendidos</span>
+                    <span class="kpi-value"
+                          th:text="${#lists.size(auction.soldProducts.?[status != null and status.name() == 'SOLD'])}">
+                0
+            </span>
+                </div>
+            </div>
+
+            <div class="kpi-card kpi-recaudado">
+                <div class="kpi-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-label">Recaudación Temporal</span>
+                    <span class="kpi-value"
+                          th:with="totalRecaudado=${#aggregates.sum(auction.soldProducts.?[status != null and status.name() == 'SOLD'].![salePrice])}"
+                          th:text="${totalRecaudado != null ? '$' + #numbers.formatDecimal(totalRecaudado, 1, 'POINT', 2, 'COMMA') : '$0,00'}">
+                $0,00
+            </span>
+                </div>
+            </div>
+
         </div>
 
         <div class="tabla-card card-asignados">
