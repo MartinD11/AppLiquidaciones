@@ -1,6 +1,7 @@
 package com.liquidacionremates.app.dto;
 
 import com.liquidacionremates.app.entity.Auction;
+import com.liquidacionremates.app.entity.BuyerLiquidation;
 import com.liquidacionremates.app.entity.Client;
 import com.liquidacionremates.app.entity.Liquidation;
 import com.liquidacionremates.app.enums.ProductStatus;
@@ -25,5 +26,5 @@ public class ProductDTO {
     private Auction auction;
     private Liquidation liquidation;
     private Client buyer;
-
+    private BuyerLiquidation buyerLiquidation;
 }

@@ -3,20 +3,23 @@
 <body>
 <div th:fragment="sidebar(activePage)" class="sidebar">
     <div class="sidebar-logo">
-        <i class="fa-solid fa-gavel" style="color: #f59e0b;"></i> Remates Avellaneda
+        <i class="fa-solid fa-gavel fa-fw" style="color: #f59e0b;"></i> Remates Avellaneda
     </div>
     <ul class="nav-menu">
         <li th:classappend="${activePage == 'clients'} ? 'active' : ''">
-            <a th:href="@{/clients}" class="nav-link"><i class="fa-solid fa-users"></i> Clientes</a>
+            <a th:href="@{/clients}" class="nav-link"><i class="fa-solid fa-users fa-fw"></i> Clientes</a>
         </li>
         <li th:classappend="${activePage == 'products'} ? 'active' : ''">
-            <a th:href="@{/products}" class="nav-link"><i class="fa-solid fa-box-open"></i> Inventario</a>
+            <a th:href="@{/products}" class="nav-link"><i class="fa-solid fa-box-open fa-fw"></i> Inventario</a>
         </li>
         <li th:classappend="${activePage == 'auctions'} ? 'active' : ''">
-            <a th:href="@{/auctions}" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Remates</a>
+            <a th:href="@{/auctions}" class="nav-link"><i class="fa-solid fa-calendar-check fa-fw"></i> Remates</a>
         </li>
         <li th:classappend="${activePage == 'liquidations'} ? 'active' : ''">
-            <a th:href="@{/liquidations}" class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i> Liquidaciones</a>
+            <a th:href="@{/liquidations}" class="nav-link"><i class="fa-solid fa-file-invoice-dollar fa-fw"></i> Liquidaciones</a>
+        </li>
+        <li th:classappend="${activePage == 'buyers'} ? 'active' : ''">
+            <a th:href="@{/buyers}" class="nav-link"><i class="fa-solid fa-cart-shopping fa-fw"></i> Compradores</a>
         </li>
     </ul>
 </div>

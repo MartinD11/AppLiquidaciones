@@ -18,6 +18,31 @@
             background: white;
         }
 
+        .totales-container {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #1e293b;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .fila-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .fila-total.comision {
+            color: #ef4444;
+        }
+
+        .fila-total.neto {
+            border-top: 2px solid #e2e8f0;
+            padding-top: 15px;
+            font-size: 16px;
+        }
+
         @media screen {
             body {
                 background-color: #f1f5f9;
@@ -28,7 +53,6 @@
                 padding: 40px;
                 border-radius: 10px;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                /* Habilitamos el scroll solo en la pantalla */
                 max-height: 85vh;
                 overflow-y: auto;
             }
@@ -71,8 +95,14 @@
                 font-size: 11px;
             }
 
-            tfoot td {
-                font-size: 14px;
+            .totales-container {
+                font-size: 13px;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .fila-total {
+                padding: 6px 10px;
             }
 
             .no-print {
@@ -93,31 +123,34 @@
     <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
         <thead>
         <tr style="border-bottom: 1px solid #e2e8f0; color: #64748b;">
+            <th style="padding: 10px; text-align: left;">Lote</th>
             <th style="padding: 10px; text-align: left;">Producto/Lote</th>
             <th style="padding: 10px; text-align: right;">Precio de Venta</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="product : ${liq.liquidatedProducts}" style="border-bottom: 1px solid #f8fafc;">
+            <td style="padding: 10px;" th:text="${product.lotNumber}">Lote 1</td>
             <td style="padding: 10px;" th:text="${product.name}">Producto X</td>
             <td style="padding: 10px; text-align: right;" th:text="${'$' + product.getSalePrice()}">$0.00</td>
         </tr>
         </tbody>
-        <tfoot style="font-weight: bold; color: #1e293b;">
-        <tr>
-            <td style="padding: 15px 10px;">Total Bruto</td>
-            <td style="padding: 15px 10px; text-align: right;" th:text="${'$' + liq.totalSold}">$0.00</td>
-        </tr>
-        <tr style="color: #ef4444;">
-            <td style="padding: 10px;">Comisión(-10%)</td>
-            <td style="padding: 10px; text-align: right;" th:text="${'-$' + liq.retainedCommission}">-$0.00</td>
-        </tr>
-        <tr style="border-top: 2px solid #e2e8f0;">
-            <td style="padding: 15px 10px;">Neto a Pagar</td>
-            <td style="padding: 15px 10px; text-align: right;" th:text="${'$' + liq.netToPay}">$0.00</td>
-        </tr>
-        </tfoot>
     </table>
+
+    <div class="totales-container">
+        <div class="fila-total">
+            <span>Total Bruto</span>
+            <span th:text="${'$' + liq.totalSold}">$0.00</span>
+        </div>
+        <div class="fila-total comision">
+            <span>Comisión(-10%)</span>
+            <span th:text="${'-$' + liq.retainedCommission}">-$0.00</span>
+        </div>
+        <div class="fila-total neto">
+            <span>Neto a Pagar</span>
+            <span th:text="${'$' + liq.netToPay}">$0.00</span>
+        </div>
+    </div>
 
     <div class="no-print" style="margin-top: 40px; text-align: center;">
         <button class="print-btn" onclick="window.print()">
