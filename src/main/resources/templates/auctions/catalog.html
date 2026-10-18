@@ -253,9 +253,9 @@
                 <tr th:each="product : ${auction.soldProducts}" th:id="'lote-' + ${product.id}">
                     <td th:text="${product.lotNumber}">1</td>
                     <td class="col-producto" th:text="${product.name}">...</td>
-                    <td th:text="${product.basePrice}"></td>
+                    <td th:text="${product.basePrice != null ? '$' + #numbers.formatDecimal(product.basePrice, 1, 'POINT', 2, 'COMMA') : '-'}"></td>
                     <td th:text="${product.buyer != null ? product.buyer.name + ' ' + product.buyer.lastName : '-'}">-</td>
-                    <td th:text="${product.salePrice != null ? '$' + product.salePrice : '-'}">-</td>
+                    <td th:text="${product.salePrice != null ? '$' + #numbers.formatDecimal(product.salePrice, 1, 'POINT', 2, 'COMMA') : '-'}">-</td>
                     <td th:text="${product.seller != null ? product.seller.name + ' ' + product.seller.lastName : '-'}">Dueño</td>
                     <td th:text="${product.status.name() == 'SOLD'} ? 'Vendido' : 'No vendido'">
                         STATUS

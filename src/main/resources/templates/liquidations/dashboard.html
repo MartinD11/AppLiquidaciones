@@ -80,18 +80,17 @@
         <div th:if="${summary != null}" class="summary-grid">
             <div class="summary-card border-blue">
                 <p style="color: #64748b; margin: 0; font-size: 0.85rem; font-weight: bold;">TOTAL BRUTO</p>
-                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #1e293b;" th:text="${'$' + #numbers.formatDecimal(summary.totalSold, 1, 2)}">$0.00</h3>
+                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #1e293b;" th:text="${'$' + #numbers.formatDecimal(summary.totalSold, 1, 'POINT', 2, 'COMMA')}">$0,00</h3>
             </div>
             <div class="summary-card border-green">
                 <p style="color: #64748b; margin: 0; font-size: 0.85rem; font-weight: bold;">COMISIÓN (10%)</p>
-                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #10b981;" th:text="${'$' + #numbers.formatDecimal(summary.totalCommission, 1, 2)}">$0.00</h3>
+                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #10b981;" th:text="${'$' + #numbers.formatDecimal(summary.totalCommission, 1, 'POINT', 2, 'COMMA')}">$0,00</h3>
             </div>
             <div class="summary-card border-orange">
                 <p style="color: #64748b; margin: 0; font-size: 0.85rem; font-weight: bold;">NETO A PAGAR</p>
-                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #1e293b;" th:text="${'$' + #numbers.formatDecimal(summary.totalNetToPay, 1, 2)}">$0.00</h3>
+                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #1e293b;" th:text="${'$' + #numbers.formatDecimal(summary.totalNetToPay, 1, 'POINT', 2, 'COMMA')}">$0,00</h3>
             </div>
         </div>
-
         <div th:if="${liquidations != null and !liquidations.isEmpty()}" class="tabla-card">
             <table>
                 <thead>
@@ -109,9 +108,9 @@
                 <tr th:each="liq : ${liquidations}">
                     <td style="font-weight: bold;" th:text="${liq.client.name + ' ' + liq.client.lastName}"></td>
                     <td th:text="${liq.liquidatedProducts.size() + ' Lotes'}"></td>
-                    <td th:text="${'$' + liq.totalSold}"></td>
-                    <td style="color: #ef4444;" th:text="${'-$' + liq.retainedCommission}"></td>
-                    <td style="font-weight: bold;" th:text="${'$' + liq.netToPay}"></td>
+                    <td th:text="${'$' + #numbers.formatDecimal(liq.totalSold, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td style="color: #ef4444;" th:text="${'-$' + #numbers.formatDecimal(liq.retainedCommission, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td style="font-weight: bold;" th:text="${'$' + #numbers.formatDecimal(liq.netToPay, 1, 'POINT', 2, 'COMMA')}"></td>
                     <td>
                         <span th:if="${liq.status.name() == 'PENDING'}" style="background-color: #fef3c7; color: #b45309; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;">PENDIENTE</span>
                         <span th:if="${liq.status.name() == 'PAID'}" style="background-color: #d1fae5; color: #047857; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;">PAGADA</span>

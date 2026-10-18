@@ -91,21 +91,23 @@
             </form>
         </div>
 
+        <!-- TARJETAS KPI FORMATEADAS -->
         <div th:if="${summary != null}" class="summary-grid">
             <div class="summary-card border-blue">
                 <p style="color: #64748b; margin: 0; font-size: 0.85rem; font-weight: bold;">TOTAL COMPRADO</p>
-                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #1e293b;" th:text="${'$' + #numbers.formatDecimal(summary.totalBought, 1, 2)}">$0.00</h3>
+                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #1e293b;" th:text="${'$' + #numbers.formatDecimal(summary.totalBought, 1, 'POINT', 2, 'COMMA')}">$0,00</h3>
             </div>
             <div class="summary-card border-green">
                 <p style="color: #64748b; margin: 0; font-size: 0.85rem; font-weight: bold;">COMISIÓN (+10%)</p>
-                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #10b981;" th:text="${'$' + #numbers.formatDecimal(summary.addedCommission, 1, 2)}">$0.00</h3>
+                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #10b981;" th:text="${'$' + #numbers.formatDecimal(summary.addedCommission, 1, 'POINT', 2, 'COMMA')}">$0,00</h3>
             </div>
             <div class="summary-card border-orange">
                 <p style="color: #64748b; margin: 0; font-size: 0.85rem; font-weight: bold;">TOTAL A COBRAR</p>
-                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #1e293b;" th:text="${'$' + #numbers.formatDecimal(summary.netToCollect, 1, 2)}">$0.00</h3>
+                <h3 style="margin: 8px 0 0; font-size: 1.5rem; color: #1e293b;" th:text="${'$' + #numbers.formatDecimal(summary.netToCollect, 1, 'POINT', 2, 'COMMA')}">$0,00</h3>
             </div>
         </div>
 
+        <!-- TABLA PRINCIPAL FORMATEADA -->
         <div th:if="${buyerLiquidations != null and !buyerLiquidations.isEmpty()}" class="tabla-card">
             <table>
                 <thead>
@@ -123,20 +125,17 @@
                 <tr th:each="liq : ${buyerLiquidations}">
                     <td style="font-weight: bold;" th:text="${liq.buyer.name + ' ' + liq.buyer.lastName}"></td>
                     <td th:text="${liq.purchasedProducts.size() + ' Lotes'}"></td>
-                    <td th:text="${'$' + liq.totalBought}"></td>
-                    <td style="color: #10b981;" th:text="${'+$' + liq.addedCommission}"></td>
-                    <td style="font-weight: bold;" th:text="${'$' + liq.netToCollect}"></td>
+                    <td th:text="${'$' + #numbers.formatDecimal(liq.totalBought, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td style="color: #10b981;" th:text="${'+$' + #numbers.formatDecimal(liq.addedCommission, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td style="font-weight: bold;" th:text="${'$' + #numbers.formatDecimal(liq.netToCollect, 1, 'POINT', 2, 'COMMA')}"></td>
                     <td>
                         <span th:if="${liq.status.name() == 'PENDING'}" style="background-color: #fef3c7; color: #b45309; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;">PENDIENTE</span>
                         <span th:if="${liq.status.name() == 'PAID'}" style="background-color: #d1fae5; color: #047857; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;">PAGADO</span>
                     </td>
                     <td>
-                        <!-- Botón para abrir el modal de Detalle -->
                         <button type="button" th:attr="onclick=|abrirModalDetalle('detalle-${liq.id}')|" class="btn-accion btn-editar" title="Ver Detalle de Lotes" style="color: #3b82f6; background: none; border: none; font-size: 1.1rem; cursor: pointer; margin-right: 10px;">
                             <i class="fa-solid fa-eye"></i>
                         </button>
-
-                        <!-- Botón para Marcar Pagado -->
                         <button th:if="${liq.status.name() == 'PENDING'}" type="button" th:attr="onclick=|abrirModalPago('${liq.id}', '${selectedAuctionId}')|" class="btn-accion" style="color: #10b981; background: none; border: none; font-size: 1.1rem; cursor: pointer;" title="Marcar Pagado">
                             <i class="fa-solid fa-check-circle"></i>
                         </button>
@@ -149,7 +148,7 @@
     </div>
 </div>
 
-
+<!-- MODAL DE DETALLES FORMATEADO -->
 <th:block th:each="liq : ${buyerLiquidations}">
     <div th:id="'modal-detalle-' + ${liq.id}" class="modal-overlay" style="display: none;">
         <div class="modal-content modal-detalle-content">
@@ -172,7 +171,7 @@
                 <tr th:each="product : ${liq.purchasedProducts}">
                     <td style="font-weight: bold; color: #64748b;" th:text="${'#' + product.lotNumber}"></td>
                     <td th:text="${product.name}"></td>
-                    <td style="text-align: right;" th:text="${'$' + product.salePrice}"></td>
+                    <td style="text-align: right;" th:text="${'$' + #numbers.formatDecimal(product.salePrice, 1, 'POINT', 2, 'COMMA')}">$0,00</td>
                 </tr>
                 </tbody>
             </table>
@@ -180,15 +179,15 @@
             <div class="totales-modal">
                 <div class="fila-total-modal">
                     <span>Total Subasta:</span>
-                    <span th:text="${'$' + liq.totalBought}"></span>
+                    <span th:text="${'$' + #numbers.formatDecimal(liq.totalBought, 1, 'POINT', 2, 'COMMA')}">$0,00</span>
                 </div>
                 <div class="fila-total-modal" style="color: #10b981;">
                     <span>Comisión Martillero (+10%):</span>
-                    <span th:text="${'+$' + liq.addedCommission}"></span>
+                    <span th:text="${'+$' + #numbers.formatDecimal(liq.addedCommission, 1, 'POINT', 2, 'COMMA')}">+$0,00</span>
                 </div>
                 <div class="fila-total-modal neto">
                     <span>A COBRAR:</span>
-                    <span th:text="${'$' + liq.netToCollect}"></span>
+                    <span th:text="${'$' + #numbers.formatDecimal(liq.netToCollect, 1, 'POINT', 2, 'COMMA')}">$0,00</span>
                 </div>
             </div>
 
@@ -196,6 +195,7 @@
     </div>
 </th:block>
 
+<!-- Modal Pago -->
 <div id="modalPago" class="modal-overlay" style="display:none;">
     <div class="modal-content">
         <span class="close-btn" onclick="cerrarModalPago()">&times;</span>
