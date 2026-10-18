@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,8 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public AuctionDTO save(AuctionDTO auctionDTO) {
         Auction auction = auctionMapper.toEntity(auctionDTO);
-        return auctionMapper.toAuctionDTO(auctionRepository.save(auction));
+        Auction savedAuction = auctionRepository.save(auction);
+        return mapToDTOWithTotal(savedAuction);
     }
 
     @Transactional
@@ -41,7 +43,8 @@ public class AuctionServiceImpl implements AuctionService {
             auction.setDate(auctionDTO.getDate());
         }
 
-        return auctionMapper.toAuctionDTO(auctionRepository.save(auction));
+        Auction updatedAuction = auctionRepository.save(auction);
+        return mapToDTOWithTotal(updatedAuction);
     }
 
     @Transactional
@@ -65,7 +68,7 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository.findByDateAndActiveTrue(date)
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontró remate activo para la fecha: " + date));
 
-        return auctionMapper.toAuctionDTO(auction);
+        return mapToDTOWithTotal(auction);
     }
 
     @Transactional(readOnly = true)
@@ -74,14 +77,14 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = auctionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Remate no encontrado con ID: " + id));
 
-        return auctionMapper.toAuctionDTO(auction);
+        return mapToDTOWithTotal(auction);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<AuctionDTO> findAll() {
         return auctionRepository.findByActiveTrue().stream()
-                .map(auctionMapper::toAuctionDTO)
+                .map(this::mapToDTOWithTotal)
                 .collect(Collectors.toList());
     }
 
@@ -96,6 +99,7 @@ public class AuctionServiceImpl implements AuctionService {
             product.setAuction(auction);
         }
     }
+
     @Transactional
     @Override
     public void removeProductFromAuction(Long productId) {
@@ -103,10 +107,8 @@ public class AuctionServiceImpl implements AuctionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con ID: " + productId));
 
         product.setAuction(null);
-
         product.setBuyer(null);
         product.setSalePrice(null);
-
         product.setStatus(ProductStatus.NOT_SOLD);
     }
 
@@ -114,7 +116,34 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public List<AuctionDTO> findAllHistorical() {
         return auctionRepository.findAll().stream()
-                .map(auctionMapper::toAuctionDTO)
+                .map(this::mapToDTOWithTotal)
                 .collect(Collectors.toList());
+    }
+
+    private AuctionDTO mapToDTOWithTotal(Auction auction) {
+        AuctionDTO dto = auctionMapper.toAuctionDTO(auction);
+        dto.setTotalCollected(calculateTotalCollected(auction));
+        dto.setSoldLotsCount(calculateSoldLotsCount(auction));
+
+        return dto;
+    }
+
+    private BigDecimal calculateTotalCollected(Auction auction) {
+        if (auction.getSoldProducts() == null || auction.getSoldProducts().isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        return auction.getSoldProducts().stream()
+                .filter(p -> p.getStatus() != null && p.getStatus() == ProductStatus.SOLD && p.getSalePrice() != null)
+                .map(Product::getSalePrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private Integer calculateSoldLotsCount(Auction auction) {
+        if (auction.getSoldProducts() == null || auction.getSoldProducts().isEmpty()) {
+            return 0;
+        }
+        return (int) auction.getSoldProducts().stream()
+                .filter(p -> p.getStatus() != null && p.getStatus() == ProductStatus.SOLD)
+                .count();
     }
 }

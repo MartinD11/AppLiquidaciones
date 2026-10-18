@@ -212,10 +212,9 @@
                 <div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div>
                 <div class="kpi-data">
                     <span class="kpi-label">Lotes Vendidos</span>
-                    <span class="kpi-value"
-                          th:text="${#lists.size(auction.soldProducts.?[status != null and status.name() == 'SOLD'])}">
-                0
-            </span>
+                    <span class="kpi-value" th:text="${auction.soldLotsCount != null ? auction.soldLotsCount : 0}">
+            0
+        </span>
                 </div>
             </div>
 
@@ -224,10 +223,9 @@
                 <div class="kpi-data">
                     <span class="kpi-label">Recaudación Temporal</span>
                     <span class="kpi-value"
-                          th:with="totalRecaudado=${#aggregates.sum(auction.soldProducts.?[status != null and status.name() == 'SOLD'].![salePrice])}"
-                          th:text="${totalRecaudado != null ? '$' + #numbers.formatDecimal(totalRecaudado, 1, 'POINT', 2, 'COMMA') : '$0,00'}">
-                $0,00
-            </span>
+                          th:text="${auction.totalCollected != null ? '$' + #numbers.formatDecimal(auction.totalCollected, 1, 'POINT', 2, 'COMMA') : '$0,00'}">
+    $0,00
+</span>
                 </div>
             </div>
 
