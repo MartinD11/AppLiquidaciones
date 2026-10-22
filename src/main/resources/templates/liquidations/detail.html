@@ -125,6 +125,7 @@
         <tr style="border-bottom: 1px solid #e2e8f0; color: #64748b;">
             <th style="padding: 10px; text-align: left;">Lote</th>
             <th style="padding: 10px; text-align: left;">Producto/Lote</th>
+            <th style="padding: 10px; text-align: right;">Precio Base</th>
             <th style="padding: 10px; text-align: right;">Precio de Venta</th>
         </tr>
         </thead>
@@ -132,6 +133,7 @@
         <tr th:each="product : ${liq.liquidatedProducts}" style="border-bottom: 1px solid #f8fafc;">
             <td style="padding: 10px;" th:text="${product.lotNumber}">Lote 1</td>
             <td style="padding: 10px;" th:text="${product.name}">Producto X</td>
+            <td style="padding: 10px; text-align: right;" th:text="${'$' + #numbers.formatDecimal(product.getBasePrice(), 1, 'POINT', 2, 'COMMA')}">$0,00</td>
             <td style="padding: 10px; text-align: right;" th:text="${'$' + #numbers.formatDecimal(product.getSalePrice(), 1, 'POINT', 2, 'COMMA')}">$0,00</td>
         </tr>
         </tbody>

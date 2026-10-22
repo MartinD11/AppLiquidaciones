@@ -30,7 +30,7 @@ public class BuyerLiquidationServiceImpl implements BuyerLiquidationService {
     private final BuyerLiquidationRepository buyerRepo;
     private final AuctionRepository auctionRepo;
     private final ProductRepository productRepo;
-    private final BuyerLiquidationMapper buyerMapper; // Inyectamos el mapper para los DTOs
+    private final BuyerLiquidationMapper buyerMapper;
 
     @Transactional
     @Override
