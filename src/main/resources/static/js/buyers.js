@@ -37,3 +37,13 @@ window.addEventListener('click', function(event) {
         event.target.style.display = "none";
     }
 });
+
+function imprimirComprobante(idZona) {
+    const zonaImpresion = document.getElementById(idZona);
+
+    zonaImpresion.classList.add('impresion-activa');
+
+    window.print();
+
+    zonaImpresion.classList.remove('impresion-activa');
+}

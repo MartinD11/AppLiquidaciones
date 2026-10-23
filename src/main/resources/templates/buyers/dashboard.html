@@ -42,6 +42,67 @@
         .totales-modal { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
         .fila-total-modal { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; }
         .fila-total-modal.neto { border-top: 2px solid #cbd5e1; padding-top: 10px; font-weight: bold; font-size: 1.1rem; color: #0f172a; margin-bottom: 0; }
+
+        @media print {
+            @page {
+                margin: 0;
+            }
+
+            html body {
+                height: auto;
+                margin: 0;
+                padding: 2cm;
+                background-color: white;
+            }
+
+            body .sidebar,
+            body .main-wrapper {
+                display: none;
+            }
+
+            body .modal-overlay {
+                position: relative;
+                display: block;
+                background: transparent;
+                padding: 0;
+                height: auto;
+            }
+
+            body .modal-content,
+            body .modal-detalle-content {
+                position: relative;
+                max-height: none;
+                overflow: visible;
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            body .no-print {
+                display: none;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+        }
+
+        .cabecera-modal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -91,7 +152,6 @@
             </form>
         </div>
 
-        <!-- TARJETAS KPI FORMATEADAS -->
         <div th:if="${summary != null}" class="summary-grid">
             <div class="summary-card border-blue">
                 <p style="color: #64748b; margin: 0; font-size: 0.85rem; font-weight: bold;">TOTAL COMPRADO</p>
@@ -107,7 +167,6 @@
             </div>
         </div>
 
-        <!-- TABLA PRINCIPAL FORMATEADA -->
         <div th:if="${buyerLiquidations != null and !buyerLiquidations.isEmpty()}" class="tabla-card">
             <table>
                 <thead>
@@ -148,46 +207,53 @@
     </div>
 </div>
 
-<!-- MODAL DE DETALLES FORMATEADO -->
 <th:block th:each="liq : ${buyerLiquidations}">
     <div th:id="'modal-detalle-' + ${liq.id}" class="modal-overlay" style="display: none;">
         <div class="modal-content modal-detalle-content">
-            <span class="close-btn" th:attr="onclick=|cerrarModalDetalle('detalle-${liq.id}')|">&times;</span>
 
-            <h3 style="margin-top:0; color: #1e293b;">
-                <i class="fa-solid fa-cart-shopping" style="color: #3b82f6;"></i>
-                Detalle de Compra: <span th:text="${liq.buyer.name + ' ' + liq.buyer.lastName}"></span>
-            </h3>
+            <div class="cabecera-modal no-print">
+                <button type="button" th:onclick="|imprimirComprobante('zona-impresion-${liq.id}')|" class="btn-submit" style="background-color: #475569; width: auto; padding: 8px 15px; font-size: 0.9rem;">
+                    <i class="fa-solid fa-print"></i> Imprimir Comprobante
+                </button>
+                <span class="close-btn" style="position: static; margin: 0;" th:attr="onclick=|cerrarModalDetalle('detalle-${liq.id}')|">&times;</span>
+            </div>
 
-            <table class="tabla-modal">
-                <thead>
-                <tr>
-                    <th style="width: 15%;">Lote Nº</th>
-                    <th style="width: 55%;">Producto</th>
-                    <th style="width: 30%; text-align: right;">Precio Cierre</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="product : ${liq.purchasedProducts}">
-                    <td style="font-weight: bold; color: #64748b;" th:text="${'#' + product.lotNumber}"></td>
-                    <td th:text="${product.name}"></td>
-                    <td style="text-align: right;" th:text="${'$' + #numbers.formatDecimal(product.salePrice, 1, 'POINT', 2, 'COMMA')}">$0,00</td>
-                </tr>
-                </tbody>
-            </table>
+            <div th:id="'zona-impresion-' + ${liq.id}">
+                <h3 style="margin-top:0; color: #1e293b;">
+                    <i class="fa-solid fa-cart-shopping" style="color: #3b82f6;"></i>
+                    Detalle de Compra: <span th:text="${liq.buyer.name + ' ' + liq.buyer.lastName}"></span>
+                </h3>
 
-            <div class="totales-modal">
-                <div class="fila-total-modal">
-                    <span>Total Subasta:</span>
-                    <span th:text="${'$' + #numbers.formatDecimal(liq.totalBought, 1, 'POINT', 2, 'COMMA')}">$0,00</span>
-                </div>
-                <div class="fila-total-modal" style="color: #10b981;">
-                    <span>Comisión Martillero (+10%):</span>
-                    <span th:text="${'+$' + #numbers.formatDecimal(liq.addedCommission, 1, 'POINT', 2, 'COMMA')}">+$0,00</span>
-                </div>
-                <div class="fila-total-modal neto">
-                    <span>A COBRAR:</span>
-                    <span th:text="${'$' + #numbers.formatDecimal(liq.netToCollect, 1, 'POINT', 2, 'COMMA')}">$0,00</span>
+                <table class="tabla-modal">
+                    <thead>
+                    <tr>
+                        <th style="width: 15%;">Lote Nº</th>
+                        <th style="width: 55%;">Producto</th>
+                        <th style="width: 30%; text-align: right;">Precio Cierre</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${liq.purchasedProducts}">
+                        <td style="font-weight: bold; color: #64748b;" th:text="${'#' + product.lotNumber}"></td>
+                        <td th:text="${product.name}"></td>
+                        <td style="text-align: right;" th:text="${'$' + #numbers.formatDecimal(product.salePrice, 1, 'POINT', 2, 'COMMA')}">$0,00</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="totales-modal">
+                    <div class="fila-total-modal">
+                        <span>Total Subasta:</span>
+                        <span th:text="${'$' + #numbers.formatDecimal(liq.totalBought, 1, 'POINT', 2, 'COMMA')}">$0,00</span>
+                    </div>
+                    <div class="fila-total-modal" style="color: #10b981;">
+                        <span>Comisión Martillero (+10%):</span>
+                        <span th:text="${'+$' + #numbers.formatDecimal(liq.addedCommission, 1, 'POINT', 2, 'COMMA')}">+$0,00</span>
+                    </div>
+                    <div class="fila-total-modal neto">
+                        <span>A COBRAR:</span>
+                        <span th:text="${'$' + #numbers.formatDecimal(liq.netToCollect, 1, 'POINT', 2, 'COMMA')}">$0,00</span>
+                    </div>
                 </div>
             </div>
 
