@@ -96,7 +96,7 @@
         <td style="padding: 5px;" th:text="${p.lotNumber}"></td>
         <td style="padding: 5px;" th:text="${p.name}"></td>
         <td style="padding: 5px;" th:text="${'$' + #numbers.formatDecimal(p.basePrice, 1, 2)}"></td>
-        <td style="padding: 5px;" th:text="${p.buyer != null ? p.buyer.name : '-'}"></td>
+        <td style="padding: 5px;" th:text="${p.buyer != null ? p.buyer.name + ' ' + p.buyer.lastName : '-'}"></td>
         <td style="padding: 5px;" th:text="${p.salePrice != null ? '$' + #numbers.formatDecimal(p.salePrice, 1, 2) : '-'}"></td>
         <td style="padding: 5px;" th:text="${p.seller != null ? p.seller.name + ' ' + p.seller.lastName : '-'}"></td>
     </tr>
